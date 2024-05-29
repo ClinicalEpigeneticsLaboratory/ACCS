@@ -1,0 +1,95 @@
+{% extends "app/base.html" %}
+{% load filters %}
+{% load static %}
+
+{% block content %}
+<script src="{% static 'app/reload.js' %}"></script>
+{% if samples %}
+<div class="container">
+    {% for sample in samples %}
+    <div class="row justify-content-center">
+        <div class="record col-lg-6">
+            <div class="row">
+                <div class="col-lg">
+                    <h1>{{ sample.sample_name }}</h1>
+                    <div class="row"><small>Creation date: {{ sample.creation_date }}</small></div>
+                    <div class="row"><small>Task id: {{ sample.task.task_id }}</small></div>
+                    <hr>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg">
+                    <p>Prediction: {{ sample.task.result | get_item:"Prediction" }} </p>
+                    <p>Confidence: {{ sample.task.result | get_item:"Max_confidence" }} </p>
+                    <p>Anomaly: {{ sample.task.result | get_item:"Anomaly"}} </p>
+                </div>
+                <div class="col-lg-6">
+                    <p>
+                        <a href="{% url 'accs-delete' sample.id %}">
+                            <button class="btn btn-outline-danger record-btn" style="margin: 5px;">Delete task</button>
+                        </a>
+                        <a href="{% url 'accs-update' sample.id %}">
+                            <button class="btn btn-outline-info record-btn" style="margin: 5px;">Update task</button>
+                        </a>
+                    </p>
+
+                    {% if sample.task.status != "SUCCESS" %}
+                    <p>
+                        <button class="btn btn-outline-danger record-btn" style="margin: 5px; cursor: default;"
+                                disabled>
+                            Status: {{ sample.task.status }}
+                        </button>
+                        <button class="btn btn-outline-info record-btn" style="margin: 5px;" disabled>See report
+                        </button>
+                    </p>
+                    {% else %}
+                    <p>
+                        <button class="btn btn-outline-success record-btn" style="margin: 5px; cursor: default;"
+                                disabled>
+                            Status: {{ sample.task.status }}
+                        </button>
+                        <a href="{% url 'accs-report' sample.id %}">
+                            <button class="btn btn-outline-info record-btn" style="margin: 5px;">See report</button>
+                        </a>
+                    </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    <div class="row justify-content-center" style="margin-bottom: 40px;">
+        <div class="col-lg-6">
+
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-end">
+
+                    {% if page_obj.has_previous %}
+                        <li class="page-item"><a class="page-link" href="?page=1">First</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}" tabindex="-1">Previous</a>
+                        </li>
+                    {% endif %}
+
+                    <li class="page-item">
+                        <span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+                    </li>
+
+                    {% if page_obj.has_next %}
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" tabindex="-1">Last</a>
+                            </li>
+                    {% endif %}
+                </ul>
+            </nav>
+
+        </div>
+    </div>
+</div>
+{% else %}
+<div>
+    <p>No data to display</p>
+</div>
+{% endif %}
+{% endblock content %}

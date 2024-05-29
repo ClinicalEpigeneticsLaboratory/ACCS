@@ -1,0 +1,32 @@
+[tool.poetry]
+name = "accs"
+version = "0.1.0"
+description = ""
+authors = ["Jan Binkowski <jan.binkowski@pum.edu.pl>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+django = "^5.0.4"
+joblib = "1.4.0"
+django-crispy-forms = "^2.1"
+crispy-bootstrap5 = "^2024.2"
+django-tables2 = "^2.7.0"
+django-extensions = "^3.2.3"
+celery = "^5.4.0"
+django-celery-results = "^2.5.1"
+pandas = "^2.2.2"
+plotly = "^5.22.0"
+python-dotenv = "^1.0.1"
+amqp = "^5.2.0"
+scikit-learn = "1.4.2"
+pyarrow = "^16.0.0"
+eventlet = "^0.36.1"
+psycopg2 = "^2.9.9"
+django-bootstrap-icons = "^0.8.7"
+django-tinymce = "^4.0.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

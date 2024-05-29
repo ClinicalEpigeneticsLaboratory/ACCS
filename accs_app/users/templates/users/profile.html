@@ -1,0 +1,23 @@
+{% extends "app/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-4 section">
+         <form method="POST">
+             {% csrf_token %}
+             <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Update profile</legend>
+                {{ user_update_form | crispy }}
+                {{ profile_update_form | crispy }}
+             </fieldset>
+             <div class="form-group" style="padding-bottom: 15px">
+                <button class="btn btn-outline-info" type="submit">Update</button>
+             </div>
+             <hr>
+            <small>
+             <p>To reset a password <a href="{% url 'accs-update-password' %}">link</a></p>
+            </small>
+        </form>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,13 @@
+{% extends "app/base.html" %}
+{% block content %}
+<h2>You have been logged out.</h2>
+<div>
+    <hr>
+    <small class="text-muted">
+        <a class="ml-2" href="{% url 'accs-login' %}">Log in again</a>
+    </small>
+</div>
+<div>
+    <br>
+</div>
+{% endblock content %}

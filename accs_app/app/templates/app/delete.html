@@ -1,0 +1,20 @@
+{% extends "app/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-4 section">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Delete sample</legend>
+                <p>Are You sure you want to delete sample: {{ object.sample_name }}?</p>
+            </fieldset>
+            <hr>
+            <div class="form-group" style="padding-bottom: 15px">
+                <button class="btn btn-outline-danger" type="submit">Yes</button>
+                <a class="btn btn-outline-info" href="{% url 'accs-history' %}">No</a>
+            </div>
+        </form>
+        </div>
+    </div>
+{% endblock content %}

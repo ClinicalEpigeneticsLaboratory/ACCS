@@ -1,0 +1,58 @@
+a {
+    text-decoration: none;
+}
+p {
+  margin: 0;
+}
+.btn  {
+  min-width: 75px;
+}
+.link{
+  color: #777779;
+}
+.text-muted-margin {
+  border-bottom: 5px
+}
+.footer-section {
+  background-color: #f8f9fa;
+  display: flex;
+  align-items: center;
+  position: fixed;
+  bottom: 0;
+  min-height: 7%;
+  margin-top: 50px;
+}
+.section {
+  background-color: #f8f9fa;
+  border-radius: 15px;
+  max-height: 75%;
+  margin-top: 2%;
+  margin-bottom: 5%;
+}
+.record {
+  background-color: #f8f9fa;
+  border-radius: 15px;
+  padding: 10px;
+  margin: 15px;
+}
+.record-btn {
+  min-width: 140px;
+}
+.nav-justified-left {
+  display: flex;
+  align-items: center;
+  margin-right: auto;
+  gap: 5px;
+}
+.nav-justified-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 5px;
+}
+.content-section {
+  background-color: #f8f9fa;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px;
+}

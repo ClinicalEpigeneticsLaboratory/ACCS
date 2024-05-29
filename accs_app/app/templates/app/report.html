@@ -1,0 +1,86 @@
+{% extends "app/base.html" %}
+{% load bootstrap_icons %}
+{% load filters %}
+
+{% block content %}
+<div class="row" style="padding: 15px;">
+    <div class="col">
+        <h5>Sample name: {{ report.sample_name }}</h5>
+        <div><small>Creation date: {{ report.creation_date }}</small></div>
+        <div><small>Task id: {{ report.task.task_id }}</small></div>
+        <div><small>Provided diagnosis: {{ report.diagnosis }}</small></div>
+        <div><small>Model: {{ report.model.name }}</small></div>
+        <hr>
+    </div>
+    <div class="row">
+        <div class="col-4">
+            <p>Prediction: {{ report.task.result | get_item:"Prediction" }}</p>
+
+            {% if report.task.result|get_item:"Confidence_status" == 'High' %}
+
+            <p>Confidence: {{ report.task.result | get_item:"Max_confidence" }} {% bs_icon 'circle-fill' color='green' %}</p>
+
+            {% elif report.task.result|get_item:"Confidence_status" == 'Medium' %}
+
+            <p>Confidence: {{ report.task.result | get_item:"Max_confidence" }} {% bs_icon 'circle-fill' color='yellow' %}</p>
+
+            {% elif report.task.result|get_item:"Confidence_status" == 'Low' %}
+
+            <p>Confidence: {{ report.task.result | get_item:"Max_confidence" }} {% bs_icon 'circle-fill' color='orange' %}</p>
+
+            {% else %}
+
+            <p>Confidence: {{ report.task.result | get_item:"Max_confidence" }} {% bs_icon 'circle-fill' color='red' %}</p>
+
+            {% endif %}
+
+        </div>
+        <div class="col-4">
+
+            <p>Anomaly: {{ report.task.result | get_item:"Anomaly" }}</p>
+
+            {% if report.task.result|get_item:'Anomaly' == 'Low-risk sample' %}
+
+            <p>Anomaly score: {{ report.task.result | get_item:'Anomaly_score' | floatformat:2 }} {% bs_icon 'circle-fill' color='green' %}</p>
+
+            {% elif report.task.result|get_item:'Anomaly' == 'Medium-risk sample' %}
+
+            <p>Anomaly score: {{ report.task.result | get_item:'Anomaly_score' | floatformat:2 }} {% bs_icon 'circle-fill' color='orange' %}</p>
+
+            {% else %}
+
+            <p>Anomaly score: {{ report.task.result | get_item:'Anomaly_score' | floatformat:2 }} {% bs_icon 'circle-fill' color='red' %}</p>
+
+            {% endif %}
+
+        </div>
+        <div class="col-4">
+            <p>Age: {{ report.age }}</p>
+            {% if report.sex %}
+                {% if report.sex == PredictedSex %}
+
+                <p>Sex declared: {{ report.sex }} vs predicted: {{ PredictedSex }} {% bs_icon 'circle-fill' color='green' %} </p>
+
+                {% else %}
+
+                <p>Sex declared: {{ report.sex }} vs predicted: {{ PredictedSex }} {% bs_icon 'circle-fill' color='red' %} </p>
+
+                {% endif %}
+
+            {% else%}
+
+            <p>Sex predicted: {{ PredictedSex }}</p>
+
+            {% endif %}
+        </div>
+    </div>
+</div>
+<div class="row justify-content-center 80hv">
+    <div class="col-8">
+        {{ pp | safe }}
+    </div>
+    <div class="col-4">
+        {{ ap | safe }}
+    </div>
+</div>
+{% endblock content %}
