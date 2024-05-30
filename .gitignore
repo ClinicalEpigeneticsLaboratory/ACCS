@@ -9,30 +9,18 @@ __pycache__/
 # nohup
 nohup.out
 
-# news
-*.news
-
-# bash scripts
-*.sh
-
 # C extensions
 *.so
-
-# Log
-log.log
 
 # Cache
 *.save
 .idea/
 
 # data
-files/
+files/artifacts
+files/tasks
 *.parquet
 *.csv
-
-# Notebooks
-notebooks/
-*.ipynb
 
 # Distribution / packaging
 .Python
