@@ -17,8 +17,8 @@ nohup.out
 .idea/
 
 # data
-files/artifacts
-files/tasks
+accs_app/files/artifacts/
+accs_app/files/tasks/
 *.parquet
 *.csv
 
