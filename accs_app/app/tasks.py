@@ -15,7 +15,7 @@ def process_single_sample(self, sample_id: uuid4, user_name: str) -> dict:
 
     task = TaskResult.objects.get(
         task_id=self.request.id
-    )  # self.request.id is coming from celery object as long as it is method --> bind=True
+    )  # self.request.id is coming from celery object as long as it is a method --> bind=True
 
     sample.task = task
     sample.save()

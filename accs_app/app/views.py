@@ -65,8 +65,9 @@ class SampleReport(LoginRequiredMixin, DetailView):
         with open(
             join(settings.TASKS_ROOT, str(context["object"].id), "predicted.json")
         ) as file:
-            context["PredictedSex"] = json.load(file)["PredictedSex"][0]
-
+            infer_from_idats = json.load(file)
+            context["PredictedSex"] = infer_from_idats["PredictedSex"][0]
+            context["Platform"] = infer_from_idats["Platform"][0]
         return context
 
 
