@@ -26,30 +26,33 @@ RUN cd Python-3.10.0 && ./configure --enable-optimizations && make -j 4 && make 
 RUN python3.10 -m pip install poetry
 
 # Copy the codebase into the container.
-WORKDIR /app
-COPY . .
+COPY requirements.R poetry.lock pyproject.toml ./
+
+# Prepare dir for sesame cache
+ENV EXPERIMENT_HUB_CACHE="/usr/local/cache/.ExperimentHub"
+RUN mkdir -p $EXPERIMENT_HUB_CACHE
 
 # Install R components
 RUN Rscript requirements.R
-
-# Prepare dir for sesame cache
-ENV EXPERIMENT_HUB_CACHE="/usr/local/.ExperimentHub"
-RUN mkdir $EXPERIMENT_HUB_CACHE
 
 # Install dependencies
 RUN python3.10 -m poetry export --without-hashes --format=requirements.txt > requirements.txt
 RUN python3.10 -m pip install -r requirements.txt
 
+WORKDIR app/
+COPY accs_app/ .
+
 # Expose the port that the application listens on.
 EXPOSE 8000
 
 # Switch to the non-privileged user to run the application.
-RUN chown appuser:appuser -R accs_app/
-RUN chown appuser:appuser -R /usr/local/.ExperimentHub
+RUN chown appuser:appuser -R ./
+RUN chmod -R 755 ./
 
-RUN chmod -R 755 accs_app/
-RUN chmod -R 755 /usr/local/.ExperimentHub
+RUN chown appuser:appuser -R $EXPERIMENT_HUB_CACHE
+RUN chmod -R 755 $EXPERIMENT_HUB_CACHE
+
 USER appuser
 
 # Run the application.
-CMD sh start_app.sh
+CMD ["sh", "start_app.sh"]

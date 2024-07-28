@@ -8,7 +8,7 @@ services:
     networks:
       - app_network
     volumes:
-      - app_data:/app/accs_app/
+      - app_data:/app/files/
       - r_cache:/usr/local/.ExperimentHub/
     depends_on:
       - redis
@@ -29,7 +29,7 @@ services:
   redis:
     image: redis:latest
     restart: on-failure
-    command: redis-server --requirepass ${REDIS_PASS}
+    command: redis-server --requirepass ${REDIS_PASS} --protected-mode yes
     ports:
       - ${REDIS_PORT}:${REDIS_PORT}
     networks:
