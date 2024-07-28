@@ -1,8 +1,8 @@
 {% extends "app/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-    <div class="row justify-content-center">
-        <div class="col-4 section">
+    <div class="row justify-content-center" style="padding: 3%">
+        <div class="col-md-4 section">
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <fieldset class="form-group">

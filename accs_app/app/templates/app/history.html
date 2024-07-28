@@ -7,10 +7,10 @@
 {% if samples %}
 <div class="container">
     {% for sample in samples %}
-    <div class="row justify-content-center">
-        <div class="record col-lg-6">
+    <div class="row justify-content-center" style="padding-right: 2%; padding-left: 2%">
+        <div class="record col-md-6">
             <div class="row">
-                <div class="col-lg">
+                <div class="col-md">
                     <h1>{{ sample.sample_name }}</h1>
                     <div class="row"><small>Creation date: {{ sample.creation_date }}</small></div>
                     <div class="row"><small>Task id: {{ sample.task.task_id }}</small></div>
@@ -18,38 +18,39 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg">
+                <div class="col-md-5">
                     <p>Prediction: {{ sample.task.result | get_item:"Prediction" }} </p>
                     <p>Confidence: {{ sample.task.result | get_item:"Max_confidence" }} </p>
                     <p>Anomaly: {{ sample.task.result | get_item:"Anomaly"}} </p>
                 </div>
-                <div class="col-lg-6">
+                <div class="col-md-3">
                     <p>
                         <a href="{% url 'accs-delete' sample.id %}">
-                            <button class="btn btn-outline-danger record-btn" style="margin: 5px;">Delete task</button>
+                            <button class="btn btn-outline-danger record-btn" style="min-width: 150px; margin: 3px">Delete task</button>
                         </a>
                         <a href="{% url 'accs-update' sample.id %}">
-                            <button class="btn btn-outline-info record-btn" style="margin: 5px;">Update task</button>
+                            <button class="btn btn-outline-info record-btn" style="min-width: 150px; margin: 3px">Update task</button>
                         </a>
                     </p>
-
+                </div>
+                <div class="col-md-3">
                     {% if sample.task.status != "SUCCESS" %}
                     <p>
-                        <button class="btn btn-outline-danger record-btn" style="margin: 5px; cursor: default;"
+                        <button class="btn btn-outline-danger record-btn" style="min-width: 150px; margin: 3px;cursor: default;"
                                 disabled>
                             Status: {{ sample.task.status }}
                         </button>
-                        <button class="btn btn-outline-info record-btn" style="margin: 5px;" disabled>See report
+                        <button class="btn btn-outline-info record-btn" style="min-width: 150px; margin: 3px" disabled>See report
                         </button>
                     </p>
                     {% else %}
                     <p>
-                        <button class="btn btn-outline-success record-btn" style="margin: 5px; cursor: default;"
+                        <button class="btn btn-outline-success record-btn" style="min-width: 150px; margin: 3px; cursor: default;"
                                 disabled>
                             Status: {{ sample.task.status }}
                         </button>
                         <a href="{% url 'accs-report' sample.id %}">
-                            <button class="btn btn-outline-info record-btn" style="margin: 5px;">See report</button>
+                            <button class="btn btn-outline-info record-btn" style="min-width: 150px; margin: 3px">See report</button>
                         </a>
                     </p>
                     {% endif %}
@@ -58,7 +59,7 @@
         </div>
     </div>
     {% endfor %}
-    <div class="row justify-content-center" style="margin-bottom: 40px;">
+    <div class="row justify-content-center" style="margin-bottom: 50px;">
         <div class="col-lg-6">
 
             <nav aria-label="Page navigation example">

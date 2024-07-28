@@ -1,5 +1,7 @@
 {% extends "app/base.html" %}
 
 {% block content %}
-    <div>About page</div>
+    <div class="row" style="padding: 3px">
+        <div class="col">{{ document.content | safe }}</div>
+    </div>
 {% endblock content %}

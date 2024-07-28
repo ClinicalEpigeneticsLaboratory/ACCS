@@ -31,15 +31,9 @@
 
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav nav-justified-left">
-                    {% if user.is_authenticated %}
                         <a class="nav-link" href="{% url 'accs-home' %}">Home</a>
                         <a class="nav-link" href="{% url 'accs-about' %}">About</a>
                         <a class="nav-link" href="{% url 'accs-legal-notice' %}">Legal notice</a>
-                    {% else %}
-                        <a class="nav-link" href="{% url 'accs-home' %}">Home</a>
-                        <a class="nav-link" href="{% url 'accs-about' %}">About</a>
-                        <a class="nav-link" href="{% url 'accs-legal-notice' %}">Legal notice</a>
-                    {% endif %}
                 </div>
 
                 {% if user.is_authenticated %}
@@ -47,20 +41,20 @@
                     <div class="navbar-nav nav-justified-right">
 
                         <a href="{% url 'accs-history' %}">
-                            <button class="btn btn-outline-danger">History</button>
+                            <button class="btn btn-outline-danger" style="min-width: 80px">History</button>
                         </a>
 
                         <a href="{% url 'accs-submit' %}">
-                            <button class="btn btn-outline-danger">Submit</button>
+                            <button class="btn btn-outline-danger" style="min-width: 80px">Submit</button>
                         </a>
 
                         <a href="{% url 'accs-profile' %}">
-                            <button class="btn btn-outline-info">Profile</button>
+                            <button class="btn btn-outline-info" style="min-width: 80px">Profile</button>
                         </a>
 
                         <form method="post" action="{% url 'accs-logout' %}">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-outline-info">Log out</button>
+                            <button type="submit" class="btn btn-outline-info" style="min-width: 80px">Log out</button>
                         </form>
 
                     </div>
@@ -69,11 +63,11 @@
 
                     <div class="navbar-nav nav-justified-right">
                         <a href="{% url 'accs-register' %}">
-                            <button class="btn btn-outline-info">Sign up</button>
+                            <button class="btn btn-outline-info" style="min-width: 80px">Sign up</button>
                         </a>
 
                         <a href="{% url 'accs-login' %}">
-                            <button class="btn btn-outline-info">Sign in</button>
+                            <button class="btn btn-outline-info" style="min-width: 80px">Sign in</button>
                         </a>
 
                     </div>

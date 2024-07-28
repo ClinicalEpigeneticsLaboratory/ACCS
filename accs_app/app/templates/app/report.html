@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="row" style="padding: 15px;">
-    <div class="col">
+    <div class="col-md-12 col-sm-12">
         <h5>Sample name: {{ report.sample_name }}</h5>
         <div><small>Creation date: {{ report.creation_date }}</small></div>
         <div><small>Task id: {{ report.task.task_id }}</small></div>
@@ -14,7 +14,7 @@
         <hr>
     </div>
     <div class="row">
-        <div class="col-4">
+        <div class="col-md-4 col-sm-12">
             <p>Prediction: {{ report.task.result | get_item:"Prediction" }}</p>
 
             {% if report.task.result|get_item:"Confidence_status" == 'High' %}
@@ -36,7 +36,7 @@
             {% endif %}
 
         </div>
-        <div class="col-4">
+        <div class="col-md-4 col-sm-12">
 
             <p>Anomaly: {{ report.task.result | get_item:"Anomaly" }}</p>
 
@@ -55,7 +55,7 @@
             {% endif %}
 
         </div>
-        <div class="col-4">
+        <div class="col-md-4 col-sm-12">
             <p>Age: {{ report.age }}</p>
             {% if report.sex %}
                 {% if report.sex == PredictedSex %}
@@ -77,10 +77,10 @@
     </div>
 </div>
 <div class="row justify-content-center 80hv">
-    <div class="col-8">
+    <div class="col-md-8 col-sm-12">
         {{ pp | safe }}
     </div>
-    <div class="col-4">
+    <div class="col-md-4 col-sm-12">
         {{ ap | safe }}
     </div>
 </div>

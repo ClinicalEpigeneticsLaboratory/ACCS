@@ -1,6 +1,43 @@
 {% extends "app/base.html" %}
 
 {% block content %}
-    <div>Home page</div>
+     <div class="row" style="padding: 2%">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    {{ document.content | safe }}
+                </div>
+            </div>
+        </div>
+     </div>
+     <div class="row" style="padding-left: 2%; padding-right: 2%; margin-bottom: 75px">
+            <div class="col-md-4">
+                <div class="card card_dynamic mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">About</h5>
+                        <p class="card-text" style="min-height: 50px">Read more about ACCS.</p>
+                        <a href="{% url 'accs-about' %}" class="btn btn-secondary">Go</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card card_dynamic mb-3">
+                  <div class="card-body">
+                    <h5 class="card-title">Legal notice</h5>
+                    <p class="card-text" style="min-height: 50px">End user license agreement as well as important terms and usage conditions.</p>
+                    <a href="{% url 'accs-legal-notice' %}" class="btn btn-secondary">Go</a>
+                  </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card card_dynamic mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">History</h5>
+                        <p class="card-text" style="min-height: 50px">Browse, analyse and menage your submissions history.</p>
+                        <a href="{% url 'accs-history' %}" class="btn btn-secondary">Go</a>
+                    </div>
+                </div>
+            </div>
+    </div>
 {% endblock content %}
 
