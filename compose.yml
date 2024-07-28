@@ -11,29 +11,27 @@ services:
       - app_data:/app/accs_app/
       - r_cache:/usr/local/.ExperimentHub/
     depends_on:
-      - rabbitmq
+      - redis
       - postgres
     environment:
       - DEBUG=${DEBUG}
       - DJANGO_SUPERUSER_USERNAME=${DJANGO_SUPERUSER_USERNAME}
       - DJANGO_SUPERUSER_PASSWORD=${DJANGO_SUPERUSER_PASSWORD}
       - DJANGO_SUPERUSER_EMAIL=${DJANGO_SUPERUSER_EMAIL}
-      - RABBITMQ_PASS=${RABBITMQ_PASS}
-      - RABBITMQ_PORT=${RABBITMQ_PORT}
+      - REDIS_PASS=${REDIS_PASS}
+      - REDIS_PORT=${REDIS_PORT}
       - DB_HOST=${DB_HOST}
       - DB_USER=${DB_USER}
       - DB_PASS=${DB_PASS}
       - DB_NAME=${DB_NAME}
       - DB_PORT=${DB_PORT}
 
-  rabbitmq:
-    image: rabbitmq:latest
+  redis:
+    image: redis:latest
     restart: on-failure
-    environment:
-      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER}
-      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASS}
+    command: redis-server --requirepass ${REDIS_PASS}
     ports:
-      - ${RABBITMQ_PORT}:${RABBITMQ_PORT}
+      - ${REDIS_PORT}:${REDIS_PORT}
     networks:
       - app_network
 

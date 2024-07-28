@@ -35,7 +35,6 @@ RUN Rscript requirements.R
 # Prepare dir for sesame cache
 ENV EXPERIMENT_HUB_CACHE="/usr/local/.ExperimentHub"
 RUN mkdir $EXPERIMENT_HUB_CACHE
-# RUN Rscript sesame_requirements.R
 
 # Install dependencies
 RUN python3.10 -m poetry export --without-hashes --format=requirements.txt > requirements.txt
@@ -46,10 +45,10 @@ EXPOSE 8000
 
 # Switch to the non-privileged user to run the application.
 RUN chown appuser:appuser -R accs_app/
-# RUN chown appuser:appuser -R /usr/local/.ExperimentHub
+RUN chown appuser:appuser -R /usr/local/.ExperimentHub
 
 RUN chmod -R 755 accs_app/
-# RUN chmod -R 755 /usr/local/.ExperimentHub/
+RUN chmod -R 755 /usr/local/.ExperimentHub
 USER appuser
 
 # Run the application.
