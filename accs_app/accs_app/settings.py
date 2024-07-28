@@ -20,8 +20,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY")
-SECRET_KEY = "django-insecure-_h#@l@fd34$^i5nx6^%9+-ov%2pomk@oi+87pk5wsne2cun=2k"
+SECRET_KEY = os.getenv("SECRET_KEY", default="XXXX")
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", default=True)
 
@@ -155,10 +155,9 @@ CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
 
 # Broker config
-host = os.getenv("RABBITMQ_HOST", default="127.0.0.1")
-user = os.getenv("RABBITMQ_USER", default="user")
-passwd = os.getenv("RABBITMQ_PASS", default="pass")
-port = os.getenv("RABBITMQ_PORT", default=5672)
+host = os.getenv("REDIS_HOST", default="127.0.0.1")
+passwd = os.getenv("REDIS_PASS", default="pass")
+port = os.getenv("REDIS_PORT", default=6379)
 
-# Change localhost to container name in dev mode
-CELERY_BROKER_URL = f"pyamqp://{user}:{passwd}@{host}:{port}//"
+# BROKER URL
+CELERY_BROKER_URL = f"redis://:{passwd}@{host}:{port}//"
