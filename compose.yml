@@ -1,6 +1,31 @@
 version: '3.7'
 
 services:
+  app:
+    build: .
+    ports:
+    - "8000:8000"
+    networks:
+      - app_network
+    volumes:
+      - app_data:/app/accs_app/
+      - r_cache:/usr/local/.ExperimentHub/
+    depends_on:
+      - rabbitmq
+      - postgres
+    environment:
+      - DEBUG=${DEBUG}
+      - DJANGO_SUPERUSER_USERNAME=${DJANGO_SUPERUSER_USERNAME}
+      - DJANGO_SUPERUSER_PASSWORD=${DJANGO_SUPERUSER_PASSWORD}
+      - DJANGO_SUPERUSER_EMAIL=${DJANGO_SUPERUSER_EMAIL}
+      - RABBITMQ_PASS=${RABBITMQ_PASS}
+      - RABBITMQ_PORT=${RABBITMQ_PORT}
+      - DB_HOST=${DB_HOST}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - DB_NAME=${DB_NAME}
+      - DB_PORT=${DB_PORT}
+
   rabbitmq:
     image: rabbitmq:latest
     restart: on-failure
@@ -32,3 +57,5 @@ networks:
 
 volumes:
   postgres_data:
+  app_data:
+  r_cache:
