@@ -129,8 +129,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "files")
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 # Custom paths
-TASKS_ROOT = os.path.join(MEDIA_ROOT, "tasks")
-ARTIFACTS_ROOT = os.path.join(MEDIA_ROOT, "artifacts")
+TASKS_ROOT = "tasks"
+ARTIFACTS_ROOT = "artifacts"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -156,8 +156,8 @@ CELERY_TASK_TIME_LIMIT = 30 * 60
 
 # Broker config
 host = os.getenv("REDIS_HOST", default="127.0.0.1")
-passwd = os.getenv("REDIS_PASS", default="pass")
+passwd = os.getenv("REDIS_PASS", default="P21efgJ8c6oBufP1hbvu")
 port = os.getenv("REDIS_PORT", default=6379)
 
 # BROKER URL
-CELERY_BROKER_URL = f"redis://:{passwd}@{host}:{port}//"
+CELERY_BROKER_URL = f"redis://default:{passwd}@{host}:{port}/0"
