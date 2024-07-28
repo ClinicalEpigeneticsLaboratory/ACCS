@@ -2,6 +2,7 @@ from os.path import join
 from subprocess import call
 
 import joblib
+import numpy as np
 import pandas as pd
 import plotly.express as px
 from plotly.io import write_json
@@ -10,27 +11,26 @@ from plotly.io import write_json
 class Inference:
     def __init__(
         self,
-        models_root: str,
+        artifacts_root: str,
         model: str,
         scaler: str,
         imputer: str,
         anomaly_detector: str,
-        tasks_path: str,
         sesame: str,
+        tasks_path: str,
         path_id: str,
     ):
         self.project = join(tasks_path, path_id)
 
-        self.model = joblib.load(join(models_root, model))
-        self.scaler = joblib.load(join(models_root, scaler))
-        self.imputer = joblib.load(join(models_root, imputer))
-        self.anomaly_detector = joblib.load(join(models_root, anomaly_detector))
+        self.model = joblib.load(join(artifacts_root, model))
+        self.scaler = joblib.load(join(artifacts_root, scaler))
+        self.imputer = joblib.load(join(artifacts_root, imputer))
+        self.anomaly_detector = joblib.load(join(artifacts_root, anomaly_detector))
 
-        self.script = sesame
+        self.script = join(artifacts_root, sesame)
 
     def parse_raw_data(self) -> None:
-        cmd = f"Rscript {self.script} {self.project}"
-        call(cmd, shell=True)
+        call(["Rscript", self.script, self.project], shell=False)
 
     def load_beta_values(self) -> pd.DataFrame:
         beta = pd.read_parquet(join(self.project, "mynorm.parquet"))
@@ -39,6 +39,10 @@ class Inference:
     def load_intens_values(self) -> pd.DataFrame:
         intens = pd.read_parquet(join(self.project, "intensity.parquet"))
         intens = intens.set_index("CpG")
+
+        intens = intens.div(intens.mean())
+        intens = intens.map(lambda x: np.log2(x + 1e-100))
+
         intens.index = [f"{probe}_intens" for probe in intens.index]
 
         return intens

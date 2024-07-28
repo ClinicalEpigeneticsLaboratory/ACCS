@@ -5,8 +5,15 @@ from django.utils.timezone import now
 from django.contrib.auth.models import User
 from django_celery_results.models import TaskResult
 from django.core.validators import RegexValidator
+from tinymce import models as tinymce_models
 
 from models_collection.models import ModelInstance
+
+
+class Document(models.Model):
+    name = models.SlugField(primary_key=True)
+    creation_date = models.DateTimeField(default=now)
+    content = tinymce_models.HTMLField(null=True, blank=True)
 
 
 class Sex(models.TextChoices):
@@ -38,7 +45,7 @@ class Sample(models.Model):
         upload_to=path,
         validators=[
             RegexValidator(
-                r".*_Grn.idat", "Expected file suffix is Grn_idat", "iDAT error"
+                r".*_Grn.idat", "Expected file suffix is _Grn.idat", "iDAT error"
             )
         ],
     )
@@ -46,7 +53,7 @@ class Sample(models.Model):
         upload_to=path,
         validators=[
             RegexValidator(
-                r".*_Red.idat", "Expected file suffix is Grn_idat", "iDAT error"
+                r".*_Red.idat", "Expected file suffix is _Red.idat", "iDAT error"
             )
         ],
     )

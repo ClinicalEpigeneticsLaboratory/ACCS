@@ -22,13 +22,13 @@ def process_single_sample(self, sample_id: uuid4, user_name: str) -> dict:
 
     path_id = Path(sample.grn_idat.path).parent.parent.name
     inf = Inference(
-        settings.MODELS_ROOT,
+        settings.ARTIFACTS_ROOT,
         model.model.path,
         model.scaler.path,
         model.imputer.path,
         model.anomaly_detector.path,
+        model.preprocessing_flow.path,
         settings.TASKS_ROOT,
-        settings.SESAME_SCRIPT,
         path_id,
     )
 

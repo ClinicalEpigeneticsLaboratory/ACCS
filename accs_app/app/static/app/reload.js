@@ -3,5 +3,5 @@ function reloadPage() {
     location.reload();
 }
 
-// Reload the page every 5 seconds
+// Reload the page every 10 seconds
 setInterval(reloadPage, 10000);

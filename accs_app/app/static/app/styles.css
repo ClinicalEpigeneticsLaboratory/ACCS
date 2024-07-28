@@ -35,6 +35,9 @@ p {
   padding: 10px;
   margin: 15px;
 }
+.record:hover {
+  box-shadow: 0px 0px 5px 2px lightgray;
+}
 .record-btn {
   min-width: 140px;
 }
@@ -55,4 +58,8 @@ p {
   border-radius: 5px;
   padding: 10px;
   margin: 10px;
+}
+.card_dynamic:hover {
+  box-shadow: 10px 10px 5px lightgray;
+  transform: translateY(-10px);
 }

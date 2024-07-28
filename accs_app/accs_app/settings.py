@@ -12,10 +12,6 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 import os
 from pathlib import Path
-from dotenv import load_dotenv
-
-# Load .env
-load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,14 +21,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv("SECRET_KEY")
-
+SECRET_KEY = "django-insecure-_h#@l@fd34$^i5nx6^%9+-ov%2pomk@oi+87pk5wsne2cun=2k"
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG")
+DEBUG = os.getenv("DEBUG", default=True)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
 # Application definition
-
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -53,6 +48,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -88,11 +84,11 @@ WSGI_APPLICATION = "accs_app.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("DB_NAME"),
-        "USER": os.getenv("DB_USER"),
-        "PASSWORD": os.getenv("DB_PASS"),
-        "HOST": os.getenv("DB_HOST"),
-        "PORT": os.getenv("DB_PORT"),
+        "NAME": os.getenv("DB_NAME", default="accs-db"),
+        "USER": os.getenv("DB_USER", default="user"),
+        "PASSWORD": os.getenv("DB_PASS", default="pass"),
+        "HOST": os.getenv("DB_HOST", default="127.0.0.1"),
+        "PORT": os.getenv("DB_PORT", default=5432),
     }
 }
 
@@ -130,11 +126,11 @@ MEDIA_URL = "files/"
 STATIC_URL = "static/"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "files")
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 # Custom paths
 TASKS_ROOT = os.path.join(MEDIA_ROOT, "tasks")
-MODELS_ROOT = os.path.join(MEDIA_ROOT, "artifacts")
-SESAME_SCRIPT = os.path.join(MEDIA_ROOT, "executables", "sesame.R")
+ARTIFACTS_ROOT = os.path.join(MEDIA_ROOT, "artifacts")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -159,9 +155,10 @@ CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
 
 # Broker config
-user = os.getenv("RABBITMQ_USER")
-passwd = os.getenv("RABBITMQ_PASS")
-port = os.getenv("RABBITMQ_PORT")
+host = os.getenv("RABBITMQ_HOST", default="127.0.0.1")
+user = os.getenv("RABBITMQ_USER", default="user")
+passwd = os.getenv("RABBITMQ_PASS", default="pass")
+port = os.getenv("RABBITMQ_PORT", default=5672)
 
 # Change localhost to container name in dev mode
-CELERY_BROKER_URL = f"pyamqp://{user}:{passwd}@localhost:{port}//"
+CELERY_BROKER_URL = f"pyamqp://{user}:{passwd}@{host}:{port}//"

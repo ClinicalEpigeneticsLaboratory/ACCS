@@ -1,9 +1,9 @@
 import json
 from os.path import join
 
+from django.conf import settings
 from django.shortcuts import render
 from django.contrib import messages
-from django.conf import settings
 from django.urls import reverse_lazy
 
 from django.views.generic import DeleteView, DetailView, CreateView, UpdateView
@@ -12,22 +12,31 @@ from django.views.generic.list import ListView
 from plotly.io import read_json
 
 from .tasks import process_single_sample
-from .models import Sample
+from .models import Sample, Document
 
 
 # Create your views here.
 def home(request):
-    context = {"title": "Home"}
+    context = {
+        "title": "Home",
+        "document": Document.objects.filter(name="home-page").first(),
+    }
     return render(request, "app/home.html", context)
 
 
 def about(request):
-    context = {"title": "About"}
+    context = {
+        "title": "About",
+        "document": Document.objects.filter(name="about-page").first(),
+    }
     return render(request, "app/about.html", context)
 
 
 def legal_notice(request):
-    context = {"title": "Legal notice"}
+    context = {
+        "title": "Legal notice",
+        "document": Document.objects.filter(name="legal-nothice").first(),
+    }
     return render(request, "app/legal_notice.html", context)
 
 
