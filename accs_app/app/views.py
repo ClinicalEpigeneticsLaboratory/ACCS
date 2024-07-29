@@ -66,7 +66,7 @@ class SampleReport(LoginRequiredMixin, DetailView):
         context["pp"] = read_json(
             join(
                 settings.MEDIA_ROOT,
-                settings.TASKS_ROOT,
+                settings.TASKS_PATH,
                 str(context["object"].id),
                 "pp.json",
             )
@@ -75,7 +75,7 @@ class SampleReport(LoginRequiredMixin, DetailView):
         context["ap"] = read_json(
             join(
                 settings.MEDIA_ROOT,
-                settings.TASKS_ROOT,
+                settings.TASKS_PATH,
                 str(context["object"].id),
                 "ap.json",
             )
@@ -84,7 +84,7 @@ class SampleReport(LoginRequiredMixin, DetailView):
         with open(
             join(
                 settings.MEDIA_ROOT,
-                settings.TASKS_ROOT,
+                settings.TASKS_PATH,
                 str(context["object"].id),
                 "predicted.json",
             )
