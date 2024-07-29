@@ -3,16 +3,21 @@
 {% block content %}
     <div class="row justify-content-center">
         <div class="col-8 section">
-        <form method="POST" enctype="multipart/form-data">
+        <form method="POST" enctype="multipart/form-data" id="submit-form">
             {% csrf_token %}
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4">Submit sample</legend>
                 {{ form | crispy }}
             </fieldset>
             <div class="form-group" style="padding-bottom: 15px">
-                <button class="btn btn-outline-info" type="submit">Start analysis</button>
+                <button class="btn btn-outline-info" type="submit" id="submit-button">Start analysis</button>
             </div>
         </form>
         </div>
     </div>
+    <script>
+        document.getElementById("submit-form").addEventListener("submit", function() {
+            document.getElementById("submit-button").disabled = true;
+        });
+    </script>
 {% endblock content %}
