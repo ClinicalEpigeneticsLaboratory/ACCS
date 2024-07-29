@@ -22,6 +22,7 @@ def process_single_sample(self, sample_id: uuid4, user_name: str) -> dict:
 
     path_id = Path(sample.grn_idat.path).parent.parent.name
     inf = Inference(
+        settings.MEDIA_ROOT,
         settings.ARTIFACTS_ROOT,
         model.model.path,
         model.scaler.path,

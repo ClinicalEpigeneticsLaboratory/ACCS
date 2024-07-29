@@ -11,6 +11,7 @@ from plotly.io import write_json
 class Inference:
     def __init__(
         self,
+        static_files_root: str,
         artifacts_root: str,
         model: str,
         scaler: str,
@@ -20,7 +21,7 @@ class Inference:
         tasks_path: str,
         path_id: str,
     ):
-        self.project = join(tasks_path, path_id)
+        self.project = join(static_files_root, tasks_path, path_id)
 
         self.model = joblib.load(join(artifacts_root, model))
         self.scaler = joblib.load(join(artifacts_root, scaler))

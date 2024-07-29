@@ -64,15 +64,30 @@ class SampleReport(LoginRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
 
         context["pp"] = read_json(
-            join(settings.TASKS_ROOT, str(context["object"].id), "pp.json")
+            join(
+                settings.MEDIA_ROOT,
+                settings.TASKS_ROOT,
+                str(context["object"].id),
+                "pp.json",
+            )
         ).to_html()
 
         context["ap"] = read_json(
-            join(settings.TASKS_ROOT, str(context["object"].id), "ap.json")
+            join(
+                settings.MEDIA_ROOT,
+                settings.TASKS_ROOT,
+                str(context["object"].id),
+                "ap.json",
+            )
         ).to_html()
 
         with open(
-            join(settings.TASKS_ROOT, str(context["object"].id), "predicted.json")
+            join(
+                settings.MEDIA_ROOT,
+                settings.TASKS_ROOT,
+                str(context["object"].id),
+                "predicted.json",
+            )
         ) as file:
             infer_from_idats = json.load(file)
             context["PredictedSex"] = infer_from_idats["PredictedSex"][0]

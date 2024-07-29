@@ -9,7 +9,7 @@ services:
       - app_network
     volumes:
       - app_data:/app/files/
-      - r_cache:/usr/local/.ExperimentHub/
+      - r_cache:/usr/local/cache/.ExperimentHub/
     depends_on:
       - redis
       - postgres
