@@ -6,7 +6,7 @@ from django.utils.timezone import now
 
 class ModelInstance(models.Model):
     def path(self, file):
-        return join(settings.ARTIFACTS_ROOT, str(self.name), file)
+        return join(settings.ARTIFACTS_PATH, str(self.name), file)
 
     name = models.CharField(max_length=50, unique=True)
     creation_date = models.DateTimeField(default=now)
