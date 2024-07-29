@@ -12,26 +12,28 @@ class Inference:
     def __init__(
         self,
         static_files_root: str,
-        artifacts_root: str,
+        artifacts_path: str,
+        tasks_path: str,
+        path_id: str,
         model: str,
         scaler: str,
         imputer: str,
         anomaly_detector: str,
-        sesame: str,
-        tasks_path: str,
-        path_id: str,
+        workflow: str,
     ):
         self.project = join(static_files_root, tasks_path, path_id)
 
-        self.model = joblib.load(join(artifacts_root, model))
-        self.scaler = joblib.load(join(artifacts_root, scaler))
-        self.imputer = joblib.load(join(artifacts_root, imputer))
-        self.anomaly_detector = joblib.load(join(artifacts_root, anomaly_detector))
+        self.model = joblib.load(join(static_files_root, artifacts_path, model))
+        self.scaler = joblib.load(join(static_files_root, artifacts_path, scaler))
+        self.imputer = joblib.load(join(static_files_root, artifacts_path, imputer))
+        self.anomaly_detector = joblib.load(
+            join(static_files_root, artifacts_path, anomaly_detector)
+        )
 
-        self.script = join(artifacts_root, sesame)
+        self.workflow = join(artifacts_path, workflow)
 
     def parse_raw_data(self) -> None:
-        call(["Rscript", self.script, self.project], shell=False)
+        call(["Rscript", self.workflow, self.project], shell=False)
 
     def load_beta_values(self) -> pd.DataFrame:
         beta = pd.read_parquet(join(self.project, "mynorm.parquet"))
