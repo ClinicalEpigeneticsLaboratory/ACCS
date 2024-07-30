@@ -26,7 +26,7 @@ if not os.getenv("SECRET_KEY"):
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", default=False) == "True"
+DEBUG = os.getenv("DEBUG", default="False") == "True"
 
 ALLOWED_HOSTS = ["127.0.0.1", "localhost", "app.epi-can.com"]
 
@@ -61,6 +61,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "accs_app.urls"
+CSRF_TRUSTED_ORIGINS = ["https://*.app.epi-can.com", "https://*.epi-can.com"]
 
 TEMPLATES = [
     {
