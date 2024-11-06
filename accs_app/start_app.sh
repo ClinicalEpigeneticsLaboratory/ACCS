@@ -1,5 +1,5 @@
 echo "----- Start celery ------ "
-python3.10 -m celery -A accs_app worker --logfile="celery.log" --concurrency=1 &
+python3.10 -m celery -A accs_app worker --logfile="celery.log" --autoscale=3,1 &
 
 echo "----- Collect static files ------ "
 python3.10 manage.py collectstatic --noinput

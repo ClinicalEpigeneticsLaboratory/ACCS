@@ -1,24 +1,29 @@
 {% extends "app/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-<div class="row justify-content-center" style="padding: 3%">
-    <div class="col-md-4 section align-self-center">
-        <form method="POST">
-            {% csrf_token %}
-            <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Sign in form</legend>
-                {{ form | crispy }}
-            </fieldset>
-            <div class="form-group">
-                <button class="btn btn-outline-info" type="submit">Sign In</button>
+<div class="form-content my-3 p-3">
+    <div class="row justify-content-center">
+        <div class="col-lg-5 align-self-center">
+            <form method="POST">
+                {% csrf_token %}
+                <fieldset class="form-group">
+                    <div class="card-header justify-content-center">
+                        <div id="error_div"></div>
+                              <h3 class="font-weight-light my-4 text-center">Sign in form</h3>
+                    </div>
+                    {{ form | crispy }}
+                </fieldset>
+                <div class="form-group">
+                    <button class="col-md-12 btn btn-outline-info" type="submit">Sign In</button>
+                </div>
+            </form>
+            <div><hr></div>
+            <div class="card-footer text-center">
+                <div class="small">
+                    <a href="{% url 'accs-register' %}">Create a new account</a><br><br>
+                    <a href="{% url 'accs-reset-password' %}">Forgot password?</a><br>
+                </div>
             </div>
-        </form>
-        <div style="padding-bottom: 15px">
-            <hr>
-            <small class="text-muted">
-                Do you need an account? <a class="ml-2" href="{% url 'accs-register' %}">Sign up now</a>
-            </small>
-        </div>
     </div>
 </div>
 {% endblock content %}
