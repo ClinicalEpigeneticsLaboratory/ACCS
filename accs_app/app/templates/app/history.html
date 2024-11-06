@@ -1,13 +1,11 @@
 {% extends "app/base.html" %}
 {% load filters %}
-{% load static %}
 
 {% block content %}
-<script src="{% static 'app/reload.js' %}"></script>
 {% if samples %}
-<div class="container">
+<div class="container" style="padding-bottom: 7vh">
     {% for sample in samples %}
-    <div class="row justify-content-center" style="padding-right: 2%; padding-left: 2%">
+    <div class="row justify-content-center" style="padding-right: 2%; padding-left: 2%" id="sample-{{ sample.id }}">
         <div class="record col-md-6">
             <div class="row">
                 <div class="col-md">
@@ -34,26 +32,14 @@
                     </p>
                 </div>
                 <div class="col-md-3">
-                    {% if sample.task.status != "SUCCESS" %}
                     <p>
-                        <button class="btn btn-outline-danger record-btn" style="min-width: 150px; margin: 3px;cursor: default;"
-                                disabled>
-                            Status: {{ sample.task.status }}
+                        <button id="status-{{ sample.task.id }}" class="btn btn-outline-danger record-btn" style="min-width: 150px; margin: 3px;cursor: default;" disabled>
+                            Status: PENDING
                         </button>
-                        <button class="btn btn-outline-info record-btn" style="min-width: 150px; margin: 3px" disabled>See report
+                        <button id="report-{{ sample.task.id }}" class="btn btn-outline-info record-btn" style="min-width: 150px; margin: 3px" disabled>
+                            <a href="{% url 'accs-report' sample.id %}">See report</a>
                         </button>
                     </p>
-                    {% else %}
-                    <p>
-                        <button class="btn btn-outline-success record-btn" style="min-width: 150px; margin: 3px; cursor: default;"
-                                disabled>
-                            Status: {{ sample.task.status }}
-                        </button>
-                        <a href="{% url 'accs-report' sample.id %}">
-                            <button class="btn btn-outline-info record-btn" style="min-width: 150px; margin: 3px">See report</button>
-                        </a>
-                    </p>
-                    {% endif %}
                 </div>
             </div>
         </div>
@@ -61,36 +47,72 @@
     {% endfor %}
     <div class="row justify-content-center" style="margin-bottom: 50px;">
         <div class="col-lg-6">
-
-            <nav aria-label="Page navigation example">
+            <nav aria-label="Page navigation">
                 <ul class="pagination justify-content-end">
-
                     {% if page_obj.has_previous %}
                         <li class="page-item"><a class="page-link" href="?page=1">First</a></li>
                         <li class="page-item">
                             <a class="page-link" href="?page={{ page_obj.previous_page_number }}" tabindex="-1">Previous</a>
                         </li>
                     {% endif %}
-
                     <li class="page-item">
                         <span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
                     </li>
-
                     {% if page_obj.has_next %}
                         <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" tabindex="-1">Last</a>
-                            </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" tabindex="-1">Last</a>
+                        </li>
                     {% endif %}
                 </ul>
             </nav>
-
         </div>
     </div>
 </div>
+
 {% else %}
+
 <div>
     <p>No data to display</p>
 </div>
+
 {% endif %}
+
+<script>
+    // Function to fetch and update task status
+ async function updateTaskStatus() {
+    // Fetch the data from the server
+    const response = await fetch('/tasks-status/');
+
+    // Parse the response as JSON, which is a list of JSON objects
+    const data = await response.json();
+
+    // Iterate through the array of JSON objects and log each element
+    data.forEach((element) => {
+        const taskID = element.task_id;
+        const task_status = element.task_status; // Task status is now captured
+
+        // Update the text content of the element with the task status
+        const statusButton = document.getElementById(`status-${taskID}`);
+        const reportButton = document.getElementById(`report-${taskID}`);
+
+        if ((statusButton) && (task_status === "SUCCESS")) {
+            statusButton.setAttribute('class', 'btn btn-outline-success record-btn');
+            statusButton.innerText = `Status: ${task_status}`
+            reportButton.disabled = false
+        }
+        if ((statusButton) && (task_status !== "SUCCESS")) {
+            statusButton.setAttribute('class', 'btn btn-outline-waring record-btn');
+            statusButton.innerText = `Status: ${task_status}`
+            reportButton.disabled = true
+        }
+    });
+ }
+
+    // Call the function to update task status
+    updateTaskStatus()
+    setInterval(updateTaskStatus, 5000)
+
+</script>
+
 {% endblock content %}

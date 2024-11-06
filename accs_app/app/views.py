@@ -1,10 +1,14 @@
+import os
 import json
 from os.path import join
+from collections import defaultdict
 
+from celery import Celery
 from django.conf import settings
 from django.shortcuts import render
 from django.contrib import messages
 from django.urls import reverse_lazy
+from django.http import JsonResponse
 
 from django.views.generic import DeleteView, DetailView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -38,6 +42,74 @@ def legal_notice(request):
         "document": Document.objects.filter(name="legal-nothice").first(),
     }
     return render(request, "app/legal_notice.html", context)
+
+
+def task_status(request):
+    if request.user.is_authenticated:
+        samples = Sample.objects.filter(user=request.user)
+
+        # Prepare the data to be returned
+        data = []
+
+        for sample in samples:
+            # Get the status from the associated TaskResult
+            if sample.task:
+                status = sample.task.status if sample.task.status else "-"
+                task_id = sample.task.id if sample.task.id else "-"
+
+                # Add the sample name and task status to the data list
+                data.append(
+                    {
+                        "task_id": task_id,
+                        "task_status": status,
+                    }
+                )
+
+        return JsonResponse(data, safe=False)
+
+    return JsonResponse({})
+
+
+def celery_status(request):
+    app = Celery("accs_app")
+    app.config_from_object("django.conf:settings", namespace="CELERY")
+
+    i = app.control.inspect(timeout=100)
+    app.close()
+
+    if i.stats():
+        worker_stats = i.stats() or {}
+        active_tasks = i.active() or {}
+        scheduled_tasks = i.reserved() or {}
+
+        thread_info = defaultdict(float)
+
+        # Get data per worker
+        for worker, stats in worker_stats.items():
+            max_concurrency = stats.get("pool", {}).get("max-concurrency", None)
+            free_threads = stats.get("pool", {}).get("free-threads", None)
+            active_threads = len(active_tasks.get(worker, []))
+            scheduled_threads = len(scheduled_tasks.get(worker, []))
+            estimated_time = round(
+                ((active_threads + scheduled_threads) / max_concurrency) * 10, 1
+            )
+
+            thread_info["max_concurrency"] += max_concurrency
+            thread_info["free_threads"] += free_threads
+            thread_info["active_threads"] += active_threads
+            thread_info["scheduled_threads"] += scheduled_threads
+            thread_info["estimated_time"] += estimated_time
+
+        return JsonResponse(thread_info)
+
+    thread_info = {
+        "max_concurrency": "NA",
+        "free_threads": "NA",
+        "active_threads": "NA",
+        "scheduled_threads": "NA",
+        "estimated_time": "NA",
+    }
+    return JsonResponse(thread_info)
 
 
 class SamplesList(LoginRequiredMixin, ListView):
@@ -80,6 +152,21 @@ class SampleReport(LoginRequiredMixin, DetailView):
                 "ap.json",
             )
         ).to_html()
+
+        cnvs = read_json(
+            join(
+                settings.MEDIA_ROOT,
+                settings.TASKS_PATH,
+                str(context["object"].id),
+                "cnvs.json",
+            ),
+            skip_invalid=True,
+        )
+        cnvs = cnvs.update_layout(
+            title="Estimated CNVs",
+            yaxis={"title": "log2 ratio of normalized intensities"},
+        )
+        context["cnvs"] = cnvs.to_html()
 
         with open(
             join(

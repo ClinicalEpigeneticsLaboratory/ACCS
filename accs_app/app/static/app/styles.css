@@ -19,15 +19,8 @@ p {
   align-items: center;
   position: fixed;
   bottom: 0;
-  min-height: 7%;
-  margin-top: 50px;
-}
-.section {
-  background-color: #f8f9fa;
-  border-radius: 15px;
-  max-height: 75%;
-  margin-top: 2%;
-  margin-bottom: 5%;
+  min-height: 7vh;
+  margin-top: 60px;
 }
 .record {
   background-color: #f8f9fa;

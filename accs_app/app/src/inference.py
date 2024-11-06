@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 import plotly.express as px
 from plotly.io import write_json
+from scipy.spatial import cKDTree
 
 
 class Inference:
@@ -31,6 +32,7 @@ class Inference:
         )
 
         self.workflow = join(artifacts_path, workflow)
+        self.manifest = pd.read_parquet(join(static_files_root, "manifest.parquet"))
 
     def parse_raw_data(self) -> None:
         call(["Rscript", self.workflow, self.project], shell=False)
@@ -39,31 +41,48 @@ class Inference:
         beta = pd.read_parquet(join(self.project, "mynorm.parquet"))
         return beta.set_index("CpG")
 
-    def load_intens_values(self) -> pd.DataFrame:
-        intens = pd.read_parquet(join(self.project, "intensity.parquet"))
-        intens = intens.set_index("CpG")
+    @staticmethod
+    def global_norm(data: pd.DataFrame) -> pd.DataFrame:
+        normalized = data.div(data.mean())
+        normalized = normalized.map(lambda x: np.log2(x))
+        normalized.index = [f"{cpg}g" for cpg in normalized.index]
+        return normalized
 
-        intens = intens.div(intens.mean())
-        intens = intens.map(lambda x: np.log2(x + 1e-100))
+    def local_norm(self, mynorm: pd.DataFrame, window: int = 1000) -> pd.DataFrame:
+        common_cpgs = self.manifest.index.intersection(mynorm.index)
 
-        intens.index = [f"{probe}_intens" for probe in intens.index]
+        # Filter both DataFrames to keep only common CpGs
+        manifest = self.manifest.loc[common_cpgs]
+        mynorm = mynorm.loc[common_cpgs]
 
-        return intens
+        # Sort manifest by chromosome and position
+        manifest = manifest.sort_values(["CHR", "MAPINFO"])
 
-    def load_delta_values(self, sample_frame: pd.DataFrame) -> pd.DataFrame:
-        pairs = [feature for feature in self.model.feature_names_in_ if "-" in feature]
+        # Initialize standardized DataFrame
+        normalized = mynorm.copy()
 
-        base_cpg = [feature.split("-")[0] for feature in pairs]
-        successive_cpg = [feature.split("-")[1] for feature in pairs]
+        # Process each chromosome independently
+        for chr_name, chr_df in manifest.groupby("CHR"):
+            # Extract positions and indices for the current chromosome
+            positions = chr_df["MAPINFO"].values
+            cpg_indices = chr_df.index
 
-        base_sample_frame = sample_frame.loc[base_cpg]
-        base_sample_frame.index = pairs
+            # Using cKDTree for efficient local window lookup
+            tree = cKDTree(positions.reshape(-1, 1))
 
-        successive_sample_frame = sample_frame.loc[successive_cpg]
-        successive_sample_frame.index = pairs
+            for idx, pos in zip(cpg_indices, positions):
+                # Query for indices within the window range
+                indices_within_window = tree.query_ball_point([pos], r=window)
 
-        deltas = successive_sample_frame - base_sample_frame
-        return deltas
+                if len(indices_within_window) == 1:
+                    continue
+
+                window_indices = cpg_indices[indices_within_window]
+                local_mean = mynorm.loc[window_indices].mean(axis=0)
+                normalized.loc[idx] = np.log2((mynorm.loc[idx] / local_mean))
+
+        normalized.index = [f"{cpg}l" for cpg in normalized.index]
+        return normalized
 
     def impute(self, data: pd.DataFrame) -> pd.DataFrame:
         if not any(data.isna()):
@@ -189,13 +208,13 @@ class Inference:
         self.parse_raw_data()
 
         beta = self.load_beta_values()
-        delta = self.load_delta_values(beta)
-        intens = self.load_intens_values()
+        beta_g_norm = self.global_norm(beta)
+        beta_l_norm = self.local_norm(beta)
 
-        data = pd.concat((beta, delta, intens))
-        data = data.loc[self.model.feature_names_in_].T
-
+        data = pd.concat((beta, beta_g_norm, beta_l_norm)).T
         data = self.impute(data)
+
+        data = data[self.model.feature_names_in_]
         data.to_parquet(join(self.project, "sample.parquet"))
 
         prediction, confidence, classes = self.predict(data)

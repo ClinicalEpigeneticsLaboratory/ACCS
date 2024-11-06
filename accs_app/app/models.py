@@ -45,7 +45,9 @@ class Sample(models.Model):
         upload_to=path,
         validators=[
             RegexValidator(
-                r".*_Grn.idat", "Expected file suffix is _Grn.idat", "iDAT error"
+                r".*_Grn.idat*",
+                "Expected file suffix is _Grn.idat or _Grn.idat.gz",
+                "iDAT error",
             )
         ],
     )
@@ -53,7 +55,9 @@ class Sample(models.Model):
         upload_to=path,
         validators=[
             RegexValidator(
-                r".*_Red.idat", "Expected file suffix is _Red.idat", "iDAT error"
+                r".*_Red.idat*",
+                "Expected file suffix is _Red.idat or _Red.idat.gz",
+                "iDAT error",
             )
         ],
     )
