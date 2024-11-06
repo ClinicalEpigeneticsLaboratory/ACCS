@@ -10,7 +10,8 @@ __pycache__/
 staticfiles/
 static/
 userfiles/
-files/
+files/artifacts
+files/tasks
 
 # nohup
 nohup.out
