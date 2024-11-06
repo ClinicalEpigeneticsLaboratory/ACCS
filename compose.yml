@@ -8,8 +8,7 @@ services:
     networks:
       - app_network
     volumes:
-      - app_data:/app/files/
-      - r_cache:/usr/local/cache/.ExperimentHub/
+      - ./accs_app/:/app/
     depends_on:
       - redis
       - postgres
@@ -18,6 +17,7 @@ services:
       - DJANGO_SUPERUSER_USERNAME=${DJANGO_SUPERUSER_USERNAME}
       - DJANGO_SUPERUSER_PASSWORD=${DJANGO_SUPERUSER_PASSWORD}
       - DJANGO_SUPERUSER_EMAIL=${DJANGO_SUPERUSER_EMAIL}
+      - SECRET_KEY=${SECRET_KEY}
       - REDIS_HOST=${REDIS_HOST}
       - REDIS_PASS=${REDIS_PASS}
       - REDIS_PORT=${REDIS_PORT}

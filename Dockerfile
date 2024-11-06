@@ -1,11 +1,13 @@
-FROM r-base:4.4.0
+FROM r-base:4.4.1
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt update && apt upgrade -y
 RUN apt install adduser -y
 RUN apt install build-essential zlib1g-dev libncurses5-dev libgdbm-dev \
+        libfontconfig1-dev libcurl4-openssl-dev libharfbuzz-dev libfribidi-dev \
         libnss3-dev libssl-dev libreadline-dev libffi-dev libsqlite3-dev \
-        wget libbz2-dev libcurl4-openssl-dev libssl-dev libxml2-dev -y
+        libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev \
+        wget libbz2-dev libssl-dev libxml2-dev pandoc -y
 
 # Create a non-privileged user that the app will run under.
 # See https://docs.docker.com/go/dockerfile-user-best-practices/
@@ -26,7 +28,7 @@ RUN cd Python-3.10.0 && ./configure --enable-optimizations && make -j 4 && make 
 RUN python3.10 -m pip install poetry
 
 # Copy the codebase into the container.
-COPY requirements.R poetry.lock pyproject.toml ./
+COPY requirements.R sesame_cache.R poetry.lock pyproject.toml ./
 
 # Prepare dir for sesame cache
 ENV EXPERIMENT_HUB_CACHE="/usr/local/cache/.ExperimentHub"
@@ -34,12 +36,18 @@ RUN mkdir -p $EXPERIMENT_HUB_CACHE
 
 # Install R components
 RUN Rscript requirements.R
+RUN Rscript sesame_cache.R
 
 # Install dependencies
 RUN python3.10 -m poetry export --without-hashes --format=requirements.txt > requirements.txt
 RUN python3.10 -m pip install -r requirements.txt
 
-WORKDIR app/
+# Download ref data for conumee
+WORKDIR /ref_data/
+RUN wget https://ftp.ncbi.nlm.nih.gov/geo/series/GSE112nnn/GSE112618/suppl/GSE112618_RAW.tar
+RUN tar -xf GSE112618_RAW.tar
+
+WORKDIR /app/
 COPY accs_app/ .
 
 # Expose the port that the application listens on.

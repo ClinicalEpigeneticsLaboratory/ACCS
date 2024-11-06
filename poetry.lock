@@ -454,6 +454,16 @@ trio = ["trio (>=0.23)"]
 wmi = ["wmi (>=1.5.1)"]
 
 [[package]]
+name = "docopt"
+version = "0.6.2"
+description = "Pythonic argument parser, that will make you smile"
+optional = false
+python-versions = "*"
+files = [
+    {file = "docopt-0.6.2.tar.gz", hash = "sha256:49b3a825280bd66b3aa83585ef59c4a8c82f2c8a522dbe754a8bc8d08c85c491"},
+]
+
+[[package]]
 name = "eventlet"
 version = "0.36.1"
 description = "Highly concurrent networking library"
@@ -562,6 +572,20 @@ gevent = ["gevent (>=1.4.0)"]
 setproctitle = ["setproctitle"]
 testing = ["coverage", "eventlet", "gevent", "pytest", "pytest-cov"]
 tornado = ["tornado (>=0.2)"]
+
+[[package]]
+name = "html-linter"
+version = "0.4.0"
+description = "Lints an HTML5 file using Google's style guide"
+optional = false
+python-versions = "*"
+files = [
+    {file = "html-linter-0.4.0.tar.gz", hash = "sha256:342dad677f2fc810a2562fde0959046ed0d8fa1387bd9e085869e908c1941191"},
+]
+
+[package.dependencies]
+docopt = ">=0.6.1"
+template-remover = "*"
 
 [[package]]
 name = "idna"
@@ -1105,6 +1129,19 @@ dev = ["build", "hatch"]
 doc = ["sphinx"]
 
 [[package]]
+name = "template-remover"
+version = "0.1.9"
+description = "Remove the template markup from html files"
+optional = false
+python-versions = "*"
+files = [
+    {file = "template-remover-0.1.9.tar.gz", hash = "sha256:480f1ce63f56affac1edb29356afcca1260e8409cd928fcf9438fc149df5ff41"},
+]
+
+[package.dependencies]
+docopt = ">=0.6.1"
+
+[[package]]
 name = "tenacity"
 version = "8.5.0"
 description = "Retry code until it succeeds"
@@ -1208,4 +1245,4 @@ brotli = ["brotli"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "86daadfaf3213fefa1ec67f2c36f6be7431afcd1894c5382133309598069a3fa"
+content-hash = "3741c8f06d308ffc78945cea1b0d1afa83ee79e9fe540de34c48b0c9d7440931"
