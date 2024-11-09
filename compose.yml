@@ -56,5 +56,3 @@ networks:
 
 volumes:
   postgres_data:
-  app_data:
-  r_cache:
