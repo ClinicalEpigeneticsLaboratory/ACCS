@@ -1,9 +1,8 @@
-import os
+import ast
 import json
 from os.path import join
 from collections import defaultdict
 
-from celery import Celery
 from django.conf import settings
 from django.shortcuts import render
 from django.contrib import messages
@@ -15,6 +14,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.list import ListView
 from plotly.io import read_json
 
+from accs_app.celery import app
 from .tasks import process_single_sample
 from .models import Sample, Document
 
@@ -57,11 +57,24 @@ def task_status(request):
                 status = sample.task.status if sample.task.status else "-"
                 task_id = sample.task.id if sample.task.id else "-"
 
+                task_content = ast.literal_eval(sample.task.result)
+                prediction = task_content.get("Prediction", "-")
+                anomaly = task_content.get("Anomaly", "-")
+                confidence = task_content.get("Confidence")
+
+                if confidence:
+                    confidence = round(max(confidence), 2)
+                else:
+                    confidence = "-"
+
                 # Add the sample name and task status to the data list
                 data.append(
                     {
                         "task_id": task_id,
                         "task_status": status,
+                        "prediction": prediction,
+                        "confidence": confidence,
+                        "anomaly": anomaly,
                     }
                 )
 
@@ -71,11 +84,7 @@ def task_status(request):
 
 
 def celery_status(request):
-    app = Celery("accs_app")
-    app.config_from_object("django.conf:settings", namespace="CELERY")
-
-    i = app.control.inspect(timeout=100)
-    app.close()
+    i = app.control.inspect(timeout=10)
 
     if i.stats():
         worker_stats = i.stats() or {}
