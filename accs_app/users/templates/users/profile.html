@@ -1,30 +1,37 @@
 {% extends "app/base.html" %}
 {% load crispy_forms_tags %}
+
 {% block content %}
 <div class="form-content my-3 p-3">
-    <div class="row justify-content-center" style="padding: 3%">
-        <div class="col-md-4 section">
-             <form method="POST">
-                 {% csrf_token %}
-                 <fieldset class="form-group">
+    <div class="container">
+        <div class="row justify-content-center" style="padding: 3%;">
+            <div class="col-lg-5 section">
+                <div class="card shadow-lg border-0 rounded-lg">
                     <div class="card-header justify-content-center">
+                        <h3 class="font-weight-light my-4 text-center">Update Your Profile</h3>
                         <div id="error_div"></div>
-                              <h3 class="font-weight-light my-4 text-center">Update your profile</h3>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <fieldset class="form-group">
+                                {{ user_update_form|crispy }}
+                                {{ profile_update_form|crispy }}
+                            </fieldset>
+                            <div class="form-group mt-4">
+                                <button class="col-md-12 btn btn-outline-info" type="submit">Update</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card-footer text-center">
+                        <div class="small">
+                            <a href="{% url 'accs-update-password' %}">Change password?</a>
+                            <hr>
+                            <a href="{% url 'accs-reset-password' %}">Forgot password?</a>
                         </div>
-                    {{ user_update_form | crispy }}
-                    {{ profile_update_form | crispy }}
-                 </fieldset>
-                 <div class="form-group" style="padding-bottom: 15px">
-                    <button class="col-md-12 btn btn-outline-info" type="submit">Update</button>
-                 </div>
-                <div><hr></div>
-                <div class="card-footer text-center">
-                <div class="small">
-                    <a href="{% url 'accs-update-password' %}">Change password?</a><br>
-                    <a href="{% url 'accs-reset-password' %}">Forgot password?</a><br>
+                    </div>
                 </div>
-              </div>
-             </form>
+            </div>
         </div>
     </div>
 </div>

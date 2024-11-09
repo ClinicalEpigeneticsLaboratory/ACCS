@@ -1,26 +1,39 @@
 {% extends "app/base.html" %}
 {% load crispy_forms_tags %}
+
 {% block content %}
-<div class="form-content my-5 p-3">
-    <div class="row justify-content-center">
-        <div class="col-lg-5 align-self-center">
-            <form method="POST">
-                {% csrf_token %}
-                <fieldset class="form-group">
-                    <div class="card-header justify-content-center">
+<div class="form-content my-3 p-3">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-5 align-self-center" style="margin-bottom: 5%">
+                <div class="card shadow-lg border-0 rounded-lg">
+                    <!-- Card Header -->
+                    <div class="card-header text-center">
+                        <h3 class="font-weight-light my-4">Sign Up</h3>
                         <div id="error_div"></div>
-                              <h3 class="font-weight-light my-4 text-center">Sign up form</h3>
+                    </div>
+
+                    <!-- Card Body with Form -->
+                    <div class="card-body">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <fieldset class="form-group">
+                                {{ form | crispy }}
+                            </fieldset>
+                            <div class="form-group mt-4">
+                                <button class="col-md-12 btn btn-outline-info" type="submit">Sign Up</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Card Footer Links -->
+                    <div class="card-footer text-center">
+                        <div class="small">
+                            <a href="{% url 'accs-login' %}">Already have an account?</a>
                         </div>
-                    {{ form | crispy }}
-                </fieldset>
-                <div class="form-group">
-                    <button class="col-md-12 btn btn-outline-info" type="submit">Sign Up</button>
+                    </div>
                 </div>
-            </form>
-            <div class="card-footer text-center">
-                <div class="small">
-                    <a href="{% url 'accs-login' %}">Already have an account?</a><br><br>
-                </div>
+            </div>
         </div>
     </div>
 </div>

@@ -1,29 +1,42 @@
 {% extends "app/base.html" %}
 {% load crispy_forms_tags %}
+
 {% block content %}
 <div class="form-content my-3 p-3">
-    <div class="row justify-content-center">
-        <div class="col-lg-5 align-self-center">
-            <form method="POST">
-                {% csrf_token %}
-                <fieldset class="form-group">
-                    <div class="card-header justify-content-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-5 align-self-center">
+                <div class="card shadow-lg border-0 rounded-lg">
+                    <!-- Card Header -->
+                    <div class="card-header text-center">
+                        <h3 class="font-weight-light my-4">Sign In</h3>
                         <div id="error_div"></div>
-                              <h3 class="font-weight-light my-4 text-center">Sign in form</h3>
                     </div>
-                    {{ form | crispy }}
-                </fieldset>
-                <div class="form-group">
-                    <button class="col-md-12 btn btn-outline-info" type="submit">Sign In</button>
-                </div>
-            </form>
-            <div><hr></div>
-            <div class="card-footer text-center">
-                <div class="small">
-                    <a href="{% url 'accs-register' %}">Create a new account</a><br><br>
-                    <a href="{% url 'accs-reset-password' %}">Forgot password?</a><br>
+
+                    <!-- Card Body with Form -->
+                    <div class="card-body">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <fieldset class="form-group">
+                                {{ form | crispy }}
+                            </fieldset>
+                            <div class="form-group mt-4">
+                                <button class="col-md-12 btn btn-outline-info" type="submit">Sign In</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Card Footer Links -->
+                    <div class="card-footer text-center">
+                        <div class="small">
+                            <a href="{% url 'accs-register' %}">Create a new account</a>
+                            <hr>
+                            <a href="{% url 'accs-reset-password' %}">Forgot password?</a>
+                        </div>
+                    </div>
                 </div>
             </div>
+        </div>
     </div>
 </div>
 {% endblock content %}
