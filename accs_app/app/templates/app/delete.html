@@ -1,20 +1,34 @@
 {% extends "app/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-    <div class="row justify-content-center" style="padding: 3%">
-        <div class="col-md-4 section">
-        <form method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Delete sample</legend>
-                <p>Are You sure you want to delete sample: {{ object.sample_name }}?</p>
-            </fieldset>
-            <hr>
-            <div class="form-group" style="padding-bottom: 15px">
-                <button class="btn btn-outline-danger" type="submit">Yes</button>
-                <a class="btn btn-outline-info" href="{% url 'accs-history' %}">No</a>
+    <div class="form-content my-3 p-3">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-5">
+                    <div class="card shadow-lg border-0 rounded-lg mt-0 mb-3">
+                        <div class="card-header justify-content-center">
+                            <h3 class="font-weight-light my-4 text-center">Delete Sample</h3>
+                        </div>
+                        <div class="card-body">
+                            <form method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <fieldset class="form-group">
+                                    <p class="text-center">Are you sure you want to delete sample: <strong>{{ object.sample_name }}</strong>?</p>
+                                </fieldset>
+                                <hr>
+                                <div class="form-row">
+                                    <div class="col-md-10 offset-md-1">
+                                        <div class="form-group mt-0 mb-1 d-flex justify-content-between">
+                                            <button class="btn btn-outline-danger" type="submit">Yes</button>
+                                            <a class="btn btn-outline-info" href="{% url 'accs-history' %}">No</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </form>
         </div>
     </div>
 {% endblock content %}

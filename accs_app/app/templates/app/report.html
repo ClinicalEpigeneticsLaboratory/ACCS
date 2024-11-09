@@ -58,15 +58,15 @@
         <div class="col-md-4 col-sm-12">
             <p>Age: {{ report.age }}</p>
             {% if report.sex %}
-                {% if report.sex == PredictedSex %}
+            {% if report.sex == PredictedSex %}
 
-                <p>Sex declared: {{ report.sex }} vs predicted: {{ PredictedSex }} {% bs_icon 'circle-fill' color='green' %} </p>
+            <p>Sex declared: {{ report.sex }} vs predicted: {{ PredictedSex }} {% bs_icon 'circle-fill' color='green' %} </p>
 
-                {% else %}
+            {% else %}
 
-                <p>Sex declared: {{ report.sex }} vs predicted: {{ PredictedSex }} {% bs_icon 'circle-fill' color='red' %} </p>
+            <p>Sex declared: {{ report.sex }} vs predicted: {{ PredictedSex }} {% bs_icon 'circle-fill' color='red' %} </p>
 
-                {% endif %}
+            {% endif %}
 
             {% else%}
 
@@ -76,7 +76,14 @@
         </div>
     </div>
 </div>
-<div class="row justify-content-center 80hv">
+
+<div id="spinner" class="d-flex justify-content-center">
+    <div class="spinner-border text-info" style="width: 3rem; height: 3rem;" role="status">
+        <span class="sr-only"></span>
+    </div>
+</div>
+
+<div class="row" id="plots-a" style="visibility: hidden">
     <div class="col-md-8 col-sm-12">
         {{ pp | safe }}
     </div>
@@ -84,9 +91,25 @@
         {{ ap | safe }}
     </div>
 </div>
-<div class="row justify-content-center 80hv" style="padding-bottom: 7vh">
-    <div class="col-md-12 col-sm-12">
+<div class="row" id="plots-b" style="visibility: hidden">
+    <div class="col-md-12">
         {{ cnvs | safe }}
     </div>
 </div>
+
+<br>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Debugging: Log to ensure spinner and plots are properly selected
+    console.log('Spinner:', document.getElementById('spinner'));
+    console.log('Plots:', document.getElementById('plots'));
+
+    // Hide the spinner
+    document.getElementById('spinner').style.setProperty('display', 'none', 'important');
+    document.getElementById('plots-a').style.setProperty('visibility', 'visible', 'important');
+    document.getElementById('plots-b').style.setProperty('visibility', 'visible', 'important');
+
+});
+</script>
 {% endblock content %}

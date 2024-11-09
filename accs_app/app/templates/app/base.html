@@ -21,7 +21,7 @@
 </head>
 
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light nav-section">
+<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light nav-section">
     <div class="container-fluid">
         <a class="navbar-brand" href="{% url 'accs-home' %}">ACCS v1</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
@@ -116,11 +116,14 @@
     </div>
 </div>
 
-
 <footer class="container-fluid footer-section">
-    <p>Powered by <a
-            href="https://www.pum.edu.pl/studia_iii_stopnia/informacje_z_jednostek/wmis/samodzielna_pracownia_epigenetyki_klinicznej/"
-            class=link>Independent Clinical Epigenetics Laboratory</a></p>
+    <div class="row">
+        <div class="col">
+            <p>
+                <a href="https://www.pum.edu.pl/studia_iii_stopnia/informacje_z_jednostek/wmis/samodzielna_pracownia_epigenetyki_klinicznej/" class=link>Independent Clinical Epigenetics Laboratory</a>
+            </p>
+        </div>
+    </div>
 </footer>
 
 <!-- Scripts -->

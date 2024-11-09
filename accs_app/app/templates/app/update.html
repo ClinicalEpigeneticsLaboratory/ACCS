@@ -1,18 +1,32 @@
 {% extends "app/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-    <div class="row justify-content-center">
-        <div class="col-8 section">
-        <form method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Update: {{ sample.sample_name }}</legend>
-                {{ form | crispy }}
-            </fieldset>
-            <div class="form-group" style="padding-bottom: 15px">
-                <button class="btn btn-outline-info" type="submit">Update</button>
+    <div class="form-content my-3 p-3">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-5">
+                    <div class="card shadow-lg border-0 rounded-lg mt-0 mb-3">
+                        <div class="card-header justify-content-center">
+                            <h3 class="font-weight-light my-4 text-center">Update: {{ sample.sample_name }}</h3>
+                        </div>
+                        <div class="card-body">
+                            <form method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <fieldset class="form-group">
+                                    {{ form | crispy }}
+                                </fieldset>
+                                <div class="form-row">
+                                    <div class="col-md-12">
+                                        <div class="form-group mt-0 mb-1">
+                                            <button class="col-lg-12 btn btn-outline-info" type="submit">Update</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </form>
         </div>
     </div>
 {% endblock content %}
