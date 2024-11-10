@@ -1,8 +1,24 @@
+/* Hide scrollbar for Chrome, Safari and Opera */
+html::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+html {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+  position: relative;
+  min-height: 100%;
+
+}
 a {
     text-decoration: none;
 }
 p {
   margin: 0;
+}
+.main {
+  min-height: 95%;
 }
 .btn  {
   min-width: 75px;
@@ -15,12 +31,13 @@ p {
 }
 .footer-section {
   background-color: #f8f9fa;
-  display: flex;
-  align-items: center;
-  position: fixed;
+  position: absolute;
   bottom: 0;
-  min-height: 7vh;
-  margin-top: 60px;
+  width: 100%;
+}
+.hr-footer {
+  border: 1px solid rgba(255, 0, 0, 0.5);
+  border-radius: 1px;
 }
 .record {
   background-color: #f8f9fa;
@@ -51,7 +68,8 @@ p {
   padding: 10px;
   margin: 10px;
 }
-.card_dynamic:hover {
-  box-shadow: 10px 10px 5px lightgray;
-  transform: translateY(-10px);
+.footer-divider {
+    border-color: rgba(252, 41, 41, 0.5); /* Light border color for visibility */
+    border-width: 5px;
+    margin: 10px 0;
 }
