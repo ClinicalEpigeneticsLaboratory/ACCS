@@ -93,7 +93,7 @@
     </div>
 </div>
 
-<div>
+<div class="main" style="margin-bottom: 30vh">
     {% block content %} {% endblock %}
 </div>
 
@@ -109,21 +109,28 @@
             <div class="modal-body">
                 <div class="status-item" id="workers">Active workers: <div class="spinner-grow spinner-grow-sm"></div></div>
                 <div class="status-item" id="active-tasks">Active tasks: <div class="spinner-grow spinner-grow-sm"></div></div>
-                <div class="status-item" id="pending-tasks">Active tasks: <div class="spinner-grow spinner-grow-sm"></div></div>
+                <div class="status-item" id="pending-tasks">Pending tasks: <div class="spinner-grow spinner-grow-sm"></div></div>
                 <div class="status-item" id="estimated-time">Estimated time to finish all submitted tasks: <div class="spinner-grow spinner-grow-sm"></div></div>
             </div>
         </div>
     </div>
 </div>
 
-<footer class="container-fluid footer-section">
-    <div class="row">
-        <div class="col">
-            <p>
-                <a href="https://www.pum.edu.pl/studia_iii_stopnia/informacje_z_jednostek/wmis/samodzielna_pracownia_epigenetyki_klinicznej/" class=link>Independent Clinical Epigenetics Laboratory</a>
-            </p>
-        </div>
+<footer class="container-fluid text-center text-light footer-section">
+    <div style="margin: 10px">
+        <a href="{% url 'accs-home' %}"><button class="btn btn-outline-secondary" style="min-width: 80px">ACCS v1</button></a>
+        <a href="mailto:jan.binkowski@pum.edu.pl"><button class="btn btn-outline-secondary" style="min-width: 80px">Contact</button></a>
     </div>
+    <hr class="hr-footer">
+    <div>
+        <p class="mb-0">
+            <a href="https://www.pum.edu.pl/studia_iii_stopnia/informacje_z_jednostek/wmis/samodzielna_pracownia_epigenetyki_klinicznej/" class="footer-link">
+                <p>Independent Clinical Epigenetics Laboratory</p>
+                <p>Pomeranian Medical University in Szczecin, Poland</p>
+            </a>
+        </p>
+    </div>
+    <br>
 </footer>
 
 <!-- Scripts -->
