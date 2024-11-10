@@ -24,6 +24,7 @@ urlpatterns = [
     path("delete/<uuid:pk>/", SampleDelete.as_view(), name="accs-delete"),
     path("update/<uuid:pk>/", SampleUpdate.as_view(), name="accs-update"),
 ]
+
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += staticfiles_urlpatterns()

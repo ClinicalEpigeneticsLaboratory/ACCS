@@ -3,6 +3,7 @@ import json
 from os.path import join
 from collections import defaultdict
 
+from django.db.models import Q
 from django.conf import settings
 from django.shortcuts import render
 from django.contrib import messages
@@ -129,7 +130,15 @@ class SamplesList(LoginRequiredMixin, ListView):
     paginate_by = 3
 
     def get_queryset(self):
-        return Sample.objects.filter(user=self.request.user).order_by("-creation_date")
+        samples = Sample.objects.filter(user=self.request.user).order_by(
+            "-creation_date"
+        )
+        query = self.request.GET.get("q")
+        if query:
+            samples = samples.filter(
+                Q(sample_name__icontains=query) | Q(diagnosis__icontains=query)
+            )
+        return samples
 
 
 class SampleReport(LoginRequiredMixin, DetailView):
@@ -195,8 +204,17 @@ class SampleSubmit(LoginRequiredMixin, CreateView):
     model = Sample
     template_name = "app/submit.html"
     redirect_field_name = "accs-history"
-    fields = ["sample_name", "diagnosis", "age", "sex", "model", "grn_idat", "red_idat"]
     success_url = reverse_lazy("accs-history")
+
+    fields = [
+        "sample_name",
+        "diagnosis",
+        "age",
+        "sex",
+        "model",
+        "grn_idat",
+        "red_idat",
+    ]
 
     def form_valid(self, form):
         sample = form.save(commit=False)
@@ -207,7 +225,7 @@ class SampleSubmit(LoginRequiredMixin, CreateView):
 
         messages.success(
             self.request,
-            f"New analysis has successfully started.",
+            f"New analysis has successfully added to queue.",
         )
         return super().form_valid(form)
 
