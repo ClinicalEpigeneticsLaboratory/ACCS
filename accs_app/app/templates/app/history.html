@@ -28,7 +28,7 @@
     {% for sample in samples %}
 
     <div class="row justify-content-center" style="padding-right: 2%; padding-left: 2%" id="sample-{{ sample.id }}">
-        <div class="record col-md-6">
+        <div class="col-md-6 card border-0 rounded-lg mt-0 mb-3 record">
             <div class="row">
                 <div class="col-md">
                     <h1>{{ sample.sample_name }}</h1>
@@ -73,6 +73,7 @@
             </div>
         </div>
     </div>
+
     {% endfor %}
 
     <div class="row justify-content-center" style="margin-bottom: 50px;">
@@ -187,7 +188,9 @@
 
         // Redirect to the URL without the 'q' parameter (resetting the search)
         const url = new URL(window.location);
-        url.searchParams.delete('q'); // Remove the 'q' parameter
+        url.searchParams.delete('q');
+
+        // Remove the 'q' parameter
         window.location.href = url.toString(); // Reload the page without the query
     });
 </script>

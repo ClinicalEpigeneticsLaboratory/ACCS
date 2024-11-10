@@ -40,12 +40,13 @@ p {
   border-radius: 1px;
 }
 .record {
-  background-color: #f8f9fa;
   padding: 10px;
   margin: 15px;
+  transition: box-shadow 0.3s ease;
+  box-shadow: 0px 4px 12px rgba(211, 211, 211, 0.8); /* Light gray shadow by default */
 }
 .record:hover {
-  box-shadow: 0px 0px 5px 2px lightgray;
+    box-shadow: 0px 4px 12px rgba(91, 91, 220, 0.5); /* Adjust the color and opacity */
 }
 .record-btn {
   min-width: 140px;
