@@ -14,7 +14,6 @@ from . import views
 
 urlpatterns = [
     path("", views.home, name="accs-home"),
-    path("celery-status/", views.celery_status, name="celery-status"),
     path("tasks-status/", views.task_status, name="celery-status"),
     path("about/", views.about, name="accs-about"),
     path("legal-notice/", views.legal_notice, name="accs-legal-notice"),

@@ -1,7 +1,6 @@
 import ast
 import json
 from os.path import join
-from collections import defaultdict
 
 from django.db.models import Q
 from django.conf import settings
@@ -15,7 +14,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.list import ListView
 from plotly.io import read_json
 
-from accs_app.celery import app
 from .tasks import process_single_sample
 from .models import Sample, Document
 
@@ -82,44 +80,6 @@ def task_status(request):
         return JsonResponse(data, safe=False)
 
     return JsonResponse({})
-
-
-def celery_status(request):
-    i = app.control.inspect(timeout=10)
-
-    if i.stats():
-        worker_stats = i.stats() or {}
-        active_tasks = i.active() or {}
-        scheduled_tasks = i.reserved() or {}
-
-        thread_info = defaultdict(float)
-
-        # Get data per worker
-        for worker, stats in worker_stats.items():
-            max_concurrency = stats.get("pool", {}).get("max-concurrency", None)
-            free_threads = stats.get("pool", {}).get("free-threads", None)
-            active_threads = len(active_tasks.get(worker, []))
-            scheduled_threads = len(scheduled_tasks.get(worker, []))
-            estimated_time = round(
-                ((active_threads + scheduled_threads) / max_concurrency) * 10, 1
-            )
-
-            thread_info["max_concurrency"] += max_concurrency
-            thread_info["free_threads"] += free_threads
-            thread_info["active_threads"] += active_threads
-            thread_info["scheduled_threads"] += scheduled_threads
-            thread_info["estimated_time"] += estimated_time
-
-        return JsonResponse(thread_info)
-
-    thread_info = {
-        "max_concurrency": "NA",
-        "free_threads": "NA",
-        "active_threads": "NA",
-        "scheduled_threads": "NA",
-        "estimated_time": "NA",
-    }
-    return JsonResponse(thread_info)
 
 
 class SamplesList(LoginRequiredMixin, ListView):
