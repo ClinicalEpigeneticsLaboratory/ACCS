@@ -24,6 +24,8 @@ nohup.out
 .idea/
 
 # data
+staticfiles/
+mediafiles/
 accs_app/files/artifacts/
 accs_app/files/tasks/
 *.parquet
