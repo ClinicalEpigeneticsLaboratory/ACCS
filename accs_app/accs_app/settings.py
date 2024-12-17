@@ -24,11 +24,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv("SECRET_KEY", default="")
+if not SECRET_KEY:
+    raise ValueError("SECRET_KEY is not set in the environment variables")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", default="False") == "True"
+DEBUG = os.getenv("DEBUG", "False").lower() == "true"
 
-ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",")
+
 
 # Application definition
 INSTALLED_APPS = [
@@ -61,7 +64,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "accs_app.urls"
-CSRF_TRUSTED_ORIGINS = []
+CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")
 
 TEMPLATES = [
     {
@@ -93,6 +96,11 @@ DATABASES = {
         "PASSWORD": os.getenv("DB_PASS", default="pass"),
         "HOST": os.getenv("DB_HOST", default="127.0.0.1"),
         "PORT": os.getenv("DB_PORT", default=5432),
+        "OPTIONS": {
+            "sslmode": os.getenv(
+                "DB_SSLMODE", "prefer"
+            ),  # can be 'require', 'prefer', or 'disable'
+        },
     }
 }
 
@@ -126,11 +134,11 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
-MEDIA_URL = "files/"
-STATIC_URL = "static/"
+MEDIA_URL = "/media/"
+STATIC_URL = "/static/"
 
-MEDIA_ROOT = os.path.join(BASE_DIR, "files")
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+MEDIA_ROOT = os.path.join(BASE_DIR, "mediafiles")
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 # Custom paths
 TASKS_PATH = "tasks"
@@ -157,6 +165,44 @@ CELERY_TIMEZONE = "Europe/Warsaw"
 CELERY_RESULT_EXTENDED = True
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
+CELERY_BROKER_TRANSPORT_OPTIONS = {
+    "visibility_timeout": 3600,
+    "retry_policy": {"interval_start": 0, "interval_step": 1, "interval_max": 3},
+}
+
+# Logging
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "{levelname} {asctime} {module} {message}",
+            "style": "{",
+        },
+        "simple": {
+            "format": "{levelname} {message}",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "console": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": "INFO",
+        },
+        "django.request": {
+            "handlers": ["console"],
+            "level": "ERROR",
+            "propagate": True,
+        },
+    },
+}
 
 # Broker config
 host = os.getenv("REDIS_HOST", default="127.0.0.1")
@@ -164,10 +210,11 @@ passwd = os.getenv("REDIS_PASS", default="pass")
 port = os.getenv("REDIS_PORT", default=6379)
 
 # BROKER URL
-CELERY_BROKER_URL = f"redis://default:{passwd}@{host}:{port}/0"
+CELERY_BROKER_URL = f"redis://:{passwd}@{host}:{port}/0"
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 
 # SMTP
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "webmaster@example.com")
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
