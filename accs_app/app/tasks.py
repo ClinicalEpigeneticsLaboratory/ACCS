@@ -22,7 +22,6 @@ def process_single_sample(self, sample_id: uuid4, user_name: str) -> dict:
 
     path_id = Path(sample.grn_idat.path).parent.parent.name
     inf = Inference(
-        settings.MEDIA_ROOT,
         settings.ARTIFACTS_PATH,
         settings.TASKS_PATH,
         path_id,
@@ -31,6 +30,7 @@ def process_single_sample(self, sample_id: uuid4, user_name: str) -> dict:
         model.imputer.path,
         model.anomaly_detector.path,
         model.preprocessing_flow.path,
+        model.manifest.path,
     )
 
     (

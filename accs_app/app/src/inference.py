@@ -1,6 +1,8 @@
 from os.path import join
 from subprocess import call
 
+from django.conf import settings
+
 import joblib
 import numpy as np
 import pandas as pd
@@ -12,7 +14,6 @@ from scipy.spatial import cKDTree
 class Inference:
     def __init__(
         self,
-        static_files_root: str,
         artifacts_path: str,
         tasks_path: str,
         path_id: str,
@@ -21,18 +22,15 @@ class Inference:
         imputer: str,
         anomaly_detector: str,
         workflow: str,
+        manifest: str,
     ):
-        self.project = join(static_files_root, tasks_path, path_id)
-
-        self.model = joblib.load(join(static_files_root, artifacts_path, model))
-        self.scaler = joblib.load(join(static_files_root, artifacts_path, scaler))
-        self.imputer = joblib.load(join(static_files_root, artifacts_path, imputer))
-        self.anomaly_detector = joblib.load(
-            join(static_files_root, artifacts_path, anomaly_detector)
-        )
-
+        self.project = join(settings.MEDIA_ROOT, tasks_path, path_id)
+        self.model = joblib.load(join(artifacts_path, model))
+        self.scaler = joblib.load(join(artifacts_path, scaler))
+        self.imputer = joblib.load(join(artifacts_path, imputer))
+        self.anomaly_detector = joblib.load(join(artifacts_path, anomaly_detector))
         self.workflow = join(artifacts_path, workflow)
-        self.manifest = pd.read_parquet(join(static_files_root, "manifest.parquet"))
+        self.manifest = pd.read_parquet(join(artifacts_path, manifest))
 
     def parse_raw_data(self) -> None:
         call(["Rscript", self.workflow, self.project], shell=False)

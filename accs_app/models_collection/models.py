@@ -17,6 +17,7 @@ class ModelInstance(models.Model):
     imputer = models.FileField(upload_to=path, max_length=255)
     anomaly_detector = models.FileField(upload_to=path, max_length=255)
     preprocessing_flow = models.FileField(upload_to=path, max_length=255)
+    manifest = models.FileField(upload_to=path, max_length=255)
 
     def __str__(self):
         return self.name
