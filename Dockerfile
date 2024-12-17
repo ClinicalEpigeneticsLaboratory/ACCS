@@ -62,5 +62,5 @@ RUN chmod -R 755 $EXPERIMENT_HUB_CACHE
 
 USER appuser
 
-# Run the application.
-CMD ["sh", "start_app.sh"]
+# Start celery and prepare django to run app
+CMD ["./setup.sh"]
