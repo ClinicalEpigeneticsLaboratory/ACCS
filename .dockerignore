@@ -8,6 +8,9 @@
 staticfiles/
 mediafiles/
 
+# Logs
+*.log
+
 # Cert
 cert/
 
