@@ -51,9 +51,9 @@ RUN tar -xf GSE112618_RAW.tar
 # Expose the port that the application listens on
 EXPOSE 8000
 
-# Switch to the non-privileged user to run the application
-RUN chown appuser:appuser -R /ACCS/
-RUN chmod -R 755 /ACCS/
+# Modify owners
+RUN chown appuser:appuser -R /ACCS/accs_app
+RUN chmod -R 755 /ACCS/accs_app
 
 RUN chown appuser:appuser -R $EXPERIMENT_HUB_CACHE
 RUN chmod -R 755 $EXPERIMENT_HUB_CACHE
@@ -61,6 +61,7 @@ RUN chmod -R 755 $EXPERIMENT_HUB_CACHE
 # Switch workdir
 WORKDIR /ACCS/accs_app/
 
+# Switch to the non-privileged user to run the application
 USER appuser
 
 # Start celery and prepare django to run app
