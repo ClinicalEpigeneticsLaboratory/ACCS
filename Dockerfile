@@ -9,6 +9,7 @@ RUN apt install build-essential zlib1g-dev libncurses5-dev libgdbm-dev \
         libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev \
         wget libbz2-dev libssl-dev libxml2-dev pandoc -y
 
+RUN update-ca-certificates
 # Create a non-privileged user that the app will run under.
 # See https://docs.docker.com/go/dockerfile-user-best-practices/
 ARG UID=10001
