@@ -8,7 +8,8 @@ services:
     networks:
       - app_network
     volumes:
-      - ./nginx/cert:/etc/ssl/certs/
+      - ./nginx/cert:/etc/ssl/certs
+      - ./accs_app/:ACCS/accs_app
       - static_volume:/ACCS/accs_app/staticfiles
       - media_volume:/ACCS/accs_app/mediafiles
     depends_on:
