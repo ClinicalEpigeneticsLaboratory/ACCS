@@ -8,10 +8,10 @@ services:
     networks:
       - app_network
     volumes:
-      - ./nginx/cert:/etc/ssl/certs
-      - ./accs_app/:ACCS/accs_app
-      - static_volume:/ACCS/accs_app/staticfiles
-      - media_volume:/ACCS/accs_app/mediafiles
+      - ./nginx/cert/:/etc/ssl/certs/
+      - ./nginx/:/var/log/nginx/
+      - static_volume:/ACCS/accs_app/staticfiles/
+      - media_volume:/ACCS/accs_app/mediafiles/
     depends_on:
       - redis
       - postgres
@@ -47,8 +47,8 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
       - ./nginx/cert:/etc/ssl/certs/
-      - static_volume:/ACCS/accs_app/staticfiles
-      - media_volume:/ACCS/accs_app/mediafiles
+      - static_volume:/ACCS/accs_app/staticfiles/
+      - media_volume:/ACCS/accs_app/mediafiles/
     depends_on:
       - app
     networks:
