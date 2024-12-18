@@ -13,9 +13,9 @@ echo "----------- Add superuser --------- "
 python3.10 manage.py createsuperuser --no-input
 
 echo "----------- Add superuser --------- "
-if [[ -n "$SSL_CERT" && -n "$SSL_KEY" ]]; then
+if [[ -f "$SSL_CERT" && -f "$SSL_KEY" ]]; then
   echo "Running gunicorn with cert/key files"
-  python3.10 -m gunicorn 'accs_app.wsgi' --bind=0.0.0.0:8000 --certfile=$SSL_CERT --keyfile=$SSL_KEY
+  python3.10 -m gunicorn 'accs_app.wsgi' --bind=0.0.0.0:443 --certfile=$SSL_CERT --keyfile=$SSL_KEY
 
 else
   echo "Files cert/key not available"
