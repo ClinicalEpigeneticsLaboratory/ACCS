@@ -14,16 +14,16 @@
     <link href="{% static 'app/styles.css' %}" rel="stylesheet" type="text/css">
 
     {% if title %}
-    <title>ACSS - {{ title }}</title>
+    <title>MbCC v1 - {{ title }}</title>
     {% else %}
-    <title>ACSS</title>
+    <title>MbCC v1</title>
     {% endif %}
 </head>
 
 <body>
 <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light nav-section">
     <div class="container-fluid">
-        <a class="navbar-brand" href="{% url 'accs-home' %}">ACCS v1</a>
+        <a class="navbar-brand" href="{% url 'accs-home' %}">MbCC v1</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
                 aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -95,7 +95,7 @@
 
 <footer class="container-fluid text-center text-light footer-section">
     <div style="margin: 10px">
-        <a href="{% url 'accs-home' %}"><button class="btn btn-outline-secondary" style="min-width: 80px">ACCS v1</button></a>
+        <a href="{% url 'accs-home' %}"><button class="btn btn-outline-secondary" style="min-width: 80px">MbCC v1</button></a>
         <a href="mailto:jan.binkowski@pum.edu.pl"><button class="btn btn-outline-secondary" style="min-width: 80px">Contact</button></a>
     </div>
     <hr class="hr-footer">
