@@ -7,6 +7,10 @@
 # Django
 files/
 staticfiles/
+mediafiles/
+
+# Cert
+cert/
 
 **/.DS_Store
 **/__pycache__

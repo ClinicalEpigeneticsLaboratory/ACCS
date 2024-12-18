@@ -49,7 +49,6 @@ reference_path <- "/ref_data/"
 reference <- openSesame(reference_path, prep = "QCDPB", func = NULL)
 reference <- CNV.load(do.call(cbind, lapply(reference, totalIntensities)))
 
-#sample <- openSesame(file.path(data_path, "idats/"), func=NULL, prep="QCDPB")
 sample <- CNV.load(totalIntensities(sdfs[[name]]), names=name)
 
 data(exclude_regions)

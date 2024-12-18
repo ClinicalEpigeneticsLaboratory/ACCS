@@ -2,7 +2,6 @@ version: '3.7'
 
 services:
   app:
-    image: janbinkowski96/accs-app
     build: .
     restart: always
     networks:

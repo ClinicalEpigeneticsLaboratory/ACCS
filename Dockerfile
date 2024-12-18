@@ -27,8 +27,9 @@ RUN tar -xvf Python-3.10.0.tgz
 RUN cd Python-3.10.0 && ./configure --enable-optimizations && make -j 4 && make altinstall
 RUN python3.10 -m pip install poetry
 
-# Copy the codebase into the container.
-COPY requirements.R sesame_cache.R poetry.lock pyproject.toml ./
+# Copy the codebase into the container
+WORKDIR /ACCS/
+COPY . .
 
 # Prepare dir for sesame cache
 ENV EXPERIMENT_HUB_CACHE="/usr/local/cache/.ExperimentHub"
@@ -47,18 +48,18 @@ WORKDIR /ref_data/
 RUN wget https://ftp.ncbi.nlm.nih.gov/geo/series/GSE112nnn/GSE112618/suppl/GSE112618_RAW.tar
 RUN tar -xf GSE112618_RAW.tar
 
-WORKDIR /app/
-COPY accs_app/ .
-
-# Expose the port that the application listens on.
+# Expose the port that the application listens on
 EXPOSE 8000
 
-# Switch to the non-privileged user to run the application.
-RUN chown appuser:appuser -R ./
-RUN chmod -R 755 ./
+# Switch to the non-privileged user to run the application
+RUN chown appuser:appuser -R /ACCS/
+RUN chmod -R 755 /ACCS/
 
 RUN chown appuser:appuser -R $EXPERIMENT_HUB_CACHE
 RUN chmod -R 755 $EXPERIMENT_HUB_CACHE
+
+# Switch workdir
+WORKDIR /ACCS/accs_app/
 
 USER appuser
 
