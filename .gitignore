@@ -11,10 +11,7 @@ cert/
 
 # Staticfiles
 staticfiles/
-static/
-userfiles/
-files/artifacts
-files/tasks
+mediafiles/
 
 # nohup
 nohup.out
