@@ -37,8 +37,8 @@ ENV EXPERIMENT_HUB_CACHE="/usr/local/cache/.ExperimentHub"
 RUN mkdir -p $EXPERIMENT_HUB_CACHE
 
 # Install R components
-# RUN Rscript requirements.R
-# RUN Rscript sesame_cache.R
+RUN Rscript requirements.R
+RUN Rscript sesame_cache.R
 
 # Install dependencies
 RUN python3.10 -m poetry export --without-hashes --format=requirements.txt > requirements.txt
