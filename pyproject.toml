@@ -7,7 +7,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-django = "^5.0.9"
+django = "^5.1.4"
 joblib = "1.4.0"
 django-crispy-forms = "^2.1"
 crispy-bootstrap5 = "^2024.2"
