@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "----- Start celery ------ "
-python3.10 -m celery --app=accs_app.celery worker --pool=eventlet --logfile="celery.log" --autoscale=3,1 -E &
+python3.10 -m celery --app=accs_app.celery worker --pool=eventlet --logfile="celery.log" --autoscale=3,2 -E &
 
 echo "----- Collect static files ------ "
 python3.10 manage.py collectstatic --noinput
