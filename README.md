@@ -91,7 +91,7 @@ MbCC's architecture leverages containerization to ensure modularity, scalability
 #### Nginx
 The Nginx server acts as a reverse proxy for the MbCC application, managing secure connections and static file serving. Below are the key aspects of the configuration:
 
-**Upstream Server**
+**Server**
 - Upstream App - The upstream block defines the application server, which is the main Django application container.
 - HTTP Redirection - Requests made over HTTP are redirected to HTTPS, ensuring all traffic is encrypted.
 - HTTPS Configuration - Handles secure HTTPS connections.  SSL/TLS certificates (*.pem and *.key) are used to enable encryption, ensuring data security.
