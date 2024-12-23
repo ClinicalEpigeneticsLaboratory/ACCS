@@ -112,6 +112,9 @@ Celery is a key component of the MbCC application, managing asynchronous task ex
 With Redis, celery supports for autoscaling, task tracking, and logging.
 
 
-### TODO
+### TODO part one
 Currently, MbCC employs a straightforward preprocessing strategy where data preprocessing is handled by external R/Python scripts executed as part of Celery tasks. While this approach is effective for managing a single model, it poses scalability challenges when dealing with a large number of models, especially if each model requires a distinct data preprocessing pipeline.
 To address this limitation, in next release i will add nextflow support what should solve this problem.
+
+### TODO part two
+Right now celery works on the same container as main Django app, it was ok so far but should be changed.
