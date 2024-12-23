@@ -108,8 +108,9 @@ The Nginx server acts as a reverse proxy for the MbCC application, managing secu
 - Error logs are recorded in /var/log/nginx/error.log.
 
 #### Celery
-Celery is used to manage asynchronous task execution in the MbCC application. Combined with Redis it allows for autoscaling, tasks tracking and logging.
-The main configuration is driven by django settings module.
+Celery is a key component of the MbCC application, managing asynchronous task execution and enabling efficient handling of computational workloads. 
+With Redis, celery supports for autoscaling, task tracking, and logging.
+
 
 ### TODO
 Currently, MbCC employs a straightforward preprocessing strategy where data preprocessing is handled by external R/Python scripts executed as part of Celery tasks. While this approach is effective for managing a single model, it poses scalability challenges when dealing with a large number of models, especially if each model requires a distinct data preprocessing pipeline.
