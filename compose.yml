@@ -8,6 +8,7 @@ services:
     networks:
       - app_network
     volumes:
+      - ./accs_app:/ACCS/accs_app/
       - ./nginx/cert/:/etc/ssl/certs/
       - static_volume:/ACCS/accs_app/staticfiles/
       - media_volume:/ACCS/accs_app/mediafiles/
@@ -23,6 +24,18 @@ services:
     command: redis-server --requirepass ${REDIS_PASS}
     networks:
       - app_network
+
+  flower:
+    image: mher/flower
+    restart: on-failure
+    command: celery --broker=redis://:${REDIS_PASS}@${REDIS_HOST}:${REDIS_PORT}/0 flower --basic-auth=${FLOWER_USER}:${FLOWER_PASS} --port=${FLOWER_PORT} --url_prefix=flower
+    depends_on:
+      - app
+      - redis
+    networks:
+      - app_network
+    env_file:
+      - .env
 
   postgres:
     image: postgres:latest

@@ -8,6 +8,8 @@ __pycache__/
 
 # Cert
 cert/
+*.pem
+*.key
 
 # Logs
 *.log
