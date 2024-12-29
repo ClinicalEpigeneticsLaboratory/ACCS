@@ -57,12 +57,12 @@ def task_status(request):
                 task_id = sample.task.id if sample.task.id else "-"
 
                 task_content = ast.literal_eval(sample.task.result)
+                anomaly = task_content.get("Anomaly_status", "-")
                 prediction = task_content.get("Prediction", "-")
-                anomaly = task_content.get("Anomaly", "-")
                 confidence = task_content.get("Confidence")
 
                 if confidence:
-                    confidence = round(max(confidence), 2)
+                    confidence = round(confidence, 2)
                 else:
                     confidence = "-"
 
@@ -118,6 +118,7 @@ class SampleReport(LoginRequiredMixin, DetailView):
                 settings.MEDIA_ROOT,
                 settings.TASKS_PATH,
                 str(context["object"].id),
+                "results",
                 "pp.json",
             )
         ).to_html()
@@ -127,36 +128,35 @@ class SampleReport(LoginRequiredMixin, DetailView):
                 settings.MEDIA_ROOT,
                 settings.TASKS_PATH,
                 str(context["object"].id),
+                "results",
                 "ap.json",
             )
         ).to_html()
 
-        cnvs = read_json(
+        context["cnvs"] = read_json(
             join(
                 settings.MEDIA_ROOT,
                 settings.TASKS_PATH,
                 str(context["object"].id),
+                "results",
                 "cnvs.json",
             ),
             skip_invalid=True,
-        )
-        cnvs = cnvs.update_layout(
-            title="Estimated CNVs",
-            yaxis={"title": "log2 ratio of normalized intensities"},
-        )
-        context["cnvs"] = cnvs.to_html()
+        ).to_html()
 
         with open(
             join(
                 settings.MEDIA_ROOT,
                 settings.TASKS_PATH,
                 str(context["object"].id),
+                "results",
                 "predicted.json",
             )
         ) as file:
-            infer_from_idats = json.load(file)
-            context["PredictedSex"] = infer_from_idats["PredictedSex"][0]
-            context["Platform"] = infer_from_idats["Platform"][0]
+            predictions = json.load(file)
+            context["Predicted_sex"] = predictions["Predicted_sex"][0]
+            context["Predicted_platform"] = predictions["Predicted_platform"][0]
+
         return context
 
 
