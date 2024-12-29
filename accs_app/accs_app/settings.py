@@ -160,6 +160,9 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 LOGIN_REDIRECT_URL = "accs-home"
 LOGIN_URL = "accs-login"
 
+# User model
+AUTH_USER_MODEL = "users.User"
+
 # Celery Configuration Options
 CELERY_RESULT_BACKEND = "django-db"
 CELERY_ACCEPT_CONTENT = ["application/json"]
