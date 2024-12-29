@@ -19,19 +19,19 @@
 
             {% if report.task.result|get_item:"Confidence_status" == 'High' %}
 
-            <p>Confidence: {{ report.task.result | get_item:"Confidence" }} {% bs_icon 'circle-fill' color='green' %}</p>
+            <p>Confidence: {{ report.task.result | get_item:"Confidence" | floatformat:2 }} {% bs_icon 'circle-fill' color='green' %}</p>
 
             {% elif report.task.result|get_item:"Confidence_status" == 'Medium' %}
 
-            <p>Confidence: {{ report.task.result | get_item:"Confidence" }} {% bs_icon 'circle-fill' color='yellow' %}</p>
+            <p>Confidence: {{ report.task.result | get_item:"Confidence" | floatformat:2 }} {% bs_icon 'circle-fill' color='yellow' %}</p>
 
             {% elif report.task.result|get_item:"Confidence_status" == 'Low' %}
 
-            <p>Confidence: {{ report.task.result | get_item:"Confidence" }} {% bs_icon 'circle-fill' color='orange' %}</p>
+            <p>Confidence: {{ report.task.result | get_item:"Confidence" | floatformat:2 }} {% bs_icon 'circle-fill' color='orange' %}</p>
 
             {% else %}
 
-            <p>Confidence: {{ report.task.result | get_item:"Confidence" }} {% bs_icon 'circle-fill' color='red' %}</p>
+            <p>Confidence: {{ report.task.result | get_item:"Confidence" | floatformat:2 }} {% bs_icon 'circle-fill' color='red' %}</p>
 
             {% endif %}
 
@@ -40,11 +40,11 @@
 
             <p>Anomaly: {{ report.task.result | get_item:"Anomaly_status" }}</p>
 
-            {% if report.task.result|get_item:'Anomaly' == 'Low-risk sample' %}
+            {% if report.task.result|get_item:'Anomaly_status' == 'Low-risk sample' %}
 
             <p>Anomaly score: {{ report.task.result | get_item:'Anomaly_score' | floatformat:2 }} {% bs_icon 'circle-fill' color='green' %}</p>
 
-            {% elif report.task.result|get_item:'Anomaly' == 'Medium-risk sample' %}
+            {% elif report.task.result|get_item:'Anomaly_status' == 'Medium-risk sample' %}
 
             <p>Anomaly score: {{ report.task.result | get_item:'Anomaly_score' | floatformat:2 }} {% bs_icon 'circle-fill' color='orange' %}</p>
 
@@ -78,7 +78,7 @@
 </div>
 
 <div id="spinner" class="d-flex justify-content-center">
-    <div class="spinner-border text-info" style="width: 10rem; height: 10rem;" role="status">
+    <div class="spinner-border text-info" style="width: 3rem; height: 3rem;" role="status">
         <span class="sr-only"></span>
     </div>
 </div>
