@@ -77,23 +77,32 @@
     </div>
 </div>
 
-<div id="spinner" class="d-flex justify-content-center">
-    <div class="spinner-border text-info" style="width: 3rem; height: 3rem;" role="status">
-        <span class="sr-only"></span>
+<div class="row">
+    <div id="spinner-row-one" class="d-flex justify-content-center" style="margin: 2%">
+        <div class="spinner-border text-info" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only"></span>
+        </div>
     </div>
-</div>
 
-<div class="row" id="plots-a" style="visibility: hidden">
-    <div class="col-md-8 col-sm-12">
+    <div class="col-md-8 col-sm-12" id="plot-a" style="visibility: hidden">
         {{ pp | safe }}
     </div>
-    <div class="col-md-4 col-sm-12">
+
+    <div class="col-md-4 col-sm-12" id="plot-b" style="visibility: hidden">
         {{ ap | safe }}
     </div>
 </div>
 
-<div class="row" id="plots-b" style="visibility: hidden">
-    <div class="col-md-12">
+<hr>
+
+<div class="row">
+    <div id="spinner-row-two" class="d-flex justify-content-center" style="margin: 2%">
+        <div class="spinner-border text-info" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only"></span>
+        </div>
+    </div>
+
+    <div class="col-md-12" id="plot-c" style="visibility: hidden">
         {{ cnvs | safe }}
     </div>
 </div>
@@ -103,9 +112,12 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Spinner:', document.getElementById('spinner'));
     console.log('Plots:', document.getElementById('plots'));
 
-    document.getElementById('spinner').style.setProperty('display', 'none', 'important');
-    document.getElementById('plots-a').style.setProperty('visibility', 'visible', 'important');
-    document.getElementById('plots-b').style.setProperty('visibility', 'visible', 'important');
+    document.getElementById('spinner-row-one').style.setProperty('display', 'none', 'important');
+    document.getElementById('spinner-row-two').style.setProperty('display', 'none', 'important');
+
+    document.getElementById('plot-a').style.setProperty('visibility', 'visible', 'important');
+    document.getElementById('plot-b').style.setProperty('visibility', 'visible', 'important');
+    document.getElementById('plot-c').style.setProperty('visibility', 'visible', 'important');
 
 });
 </script>

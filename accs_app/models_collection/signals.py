@@ -12,7 +12,7 @@ from .models import ModelInstance
 
 @receiver(post_save, sender=ModelInstance)
 def pull_model_repo(sender, instance, created, **kwargs):
-    model_remote_repository = instance.model_remote_repository
+    model_remote_repository = instance.remote_repository
     model_destination_path = join(
         settings.MEDIA_ROOT, settings.ARTIFACTS_PATH, instance.name
     )

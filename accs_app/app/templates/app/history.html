@@ -63,12 +63,12 @@
                                 style="min-width: 155px; margin: 3px; cursor: default;" disabled>
                                 Status: PENDING
                         </button>
-                        <button id="report-{{ sample.task.id }}" class="btn btn-outline-info record-btn"
-                                style="min-width: 155px; margin: 3px" disabled>
-                            <a href="{% url 'accs-report' sample.id %}" style="text-decoration: none; color: inherit;">
+                        <a href="{% url 'accs-report' sample.id %}" style="text-decoration: none; color: inherit;">
+                            <button id="report-{{ sample.task.id }}" class="btn btn-outline-info record-btn"
+                                    style="min-width: 155px; margin: 3px" disabled>
                                 See report
-                            </a>
-                        </button>
+                            </button>
+                        </a>
                     </p>
                 </div>
             </div>

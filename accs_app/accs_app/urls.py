@@ -23,6 +23,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("app.urls")),
     path("", include("users.urls")),
+    path("", include("models_collection.urls")),
     path(
         "login/",
         auth_views.LoginView.as_view(template_name="users/login.html"),

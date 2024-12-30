@@ -1,5 +1,7 @@
+import os
 import ast
 import json
+import requests
 from os.path import join
 
 from django.db.models import Q
@@ -8,6 +10,7 @@ from django.shortcuts import render
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 
 from django.views.generic import DeleteView, DetailView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -43,43 +46,41 @@ def legal_notice(request):
     return render(request, "app/legal_notice.html", context)
 
 
+@login_required(login_url="accs-login")
 def task_status(request):
-    if request.user.is_authenticated:
-        samples = Sample.objects.filter(user=request.user)
+    samples = Sample.objects.filter(user=request.user)
 
-        # Prepare the data to be returned
-        data = []
+    # Prepare the data to be returned
+    data = []
 
-        for sample in samples:
-            # Get the status from the associated TaskResult
-            if sample.task:
-                status = sample.task.status if sample.task.status else "-"
-                task_id = sample.task.id if sample.task.id else "-"
+    for sample in samples:
+        # Get the status from the associated TaskResult
+        if sample.task:
+            status = sample.task.status if sample.task.status else "-"
+            task_id = sample.task.id if sample.task.id else "-"
 
-                task_content = ast.literal_eval(sample.task.result)
-                anomaly = task_content.get("Anomaly_status", "-")
-                prediction = task_content.get("Prediction", "-")
-                confidence = task_content.get("Confidence")
+            task_content = ast.literal_eval(sample.task.result)
+            anomaly = task_content.get("Anomaly_status", "-")
+            prediction = task_content.get("Prediction", "-")
+            confidence = task_content.get("Confidence")
 
-                if confidence:
-                    confidence = round(confidence, 2)
-                else:
-                    confidence = "-"
+            if confidence:
+                confidence = round(confidence, 2)
+            else:
+                confidence = "-"
 
-                # Add the sample name and task status to the data list
-                data.append(
-                    {
-                        "task_id": task_id,
-                        "task_status": status,
-                        "prediction": prediction,
-                        "confidence": confidence,
-                        "anomaly": anomaly,
-                    }
-                )
+            # Add the sample name and task status to the data list
+            data.append(
+                {
+                    "task_id": task_id,
+                    "task_status": status,
+                    "prediction": prediction,
+                    "confidence": confidence,
+                    "anomaly": anomaly,
+                }
+            )
 
-        return JsonResponse(data, safe=False)
-
-    return JsonResponse({})
+    return JsonResponse(data, safe=False)
 
 
 class SamplesList(LoginRequiredMixin, ListView):

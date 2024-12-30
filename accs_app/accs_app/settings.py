@@ -33,7 +33,7 @@ if not SECRET_KEY:
 DEBUG = os.getenv("DEBUG", "False").lower() == "true"
 
 if DEBUG:
-    ALLOWED_HOSTS = "localhost"
+    ALLOWED_HOSTS = ["localhost"]
 else:
     ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",")
 
@@ -68,8 +68,9 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "accs_app.urls"
+
 if DEBUG:
-    CSRF_TRUSTED_ORIGINS = "http://localhost"
+    CSRF_TRUSTED_ORIGINS = ["http://localhost"]
 else:
     CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")
 
