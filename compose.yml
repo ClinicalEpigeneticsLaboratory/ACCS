@@ -1,22 +1,44 @@
-version: '3.7'
-
 services:
   app:
-    image: janbinkowski96/accs-app
-    build: .
+    build:
+      context: .
+      dockerfile: images/app/Dockerfile
+      args:
+        UID: 1001
+        GID: 1001
     restart: always
+    ports:
+      - 8888:8000
     networks:
       - app_network
     volumes:
       - ./accs_app:/ACCS/accs_app/
-      - ./nginx/cert/:/etc/ssl/certs/
+      - media_volume:/ACCS/accs_app/mediafiles/
       - static_volume:/ACCS/accs_app/staticfiles/
+    depends_on:
+      # - nginx
+      - redis
+      - db
+    env_file:
+      .env
+
+  celery_worker:
+    image: janbinkowski96/accs-celery-worker
+    build:
+      context: .
+      dockerfile: images/celery_worker/Dockerfile
+      args:
+        UID: 1001
+        GID: 1001
+    networks:
+      - app_network
+    volumes:
+      - ./accs_app:/ACCS/accs_app/
       - media_volume:/ACCS/accs_app/mediafiles/
     depends_on:
       - redis
-      - postgres
     env_file:
-      .env
+      - .env
 
   redis:
     image: redis:latest
@@ -28,16 +50,18 @@ services:
   flower:
     image: mher/flower
     restart: on-failure
-    command: celery --broker=redis://:${REDIS_PASS}@${REDIS_HOST}:${REDIS_PORT}/0 flower --basic-auth=${FLOWER_USER}:${FLOWER_PASS} --port=${FLOWER_PORT} --url_prefix=flower
+    ports:
+      - 5555:5555
+    command: celery --broker=redis://:${REDIS_PASS}@${REDIS_HOST}:${REDIS_PORT}/0 flower --basic-auth=${FLOWER_USER}:${FLOWER_PASS} --port=${FLOWER_PORT} --url_prefix=${FLOWER_ENDPOINT}
     depends_on:
-      - app
       - redis
+      - celery_worker
     networks:
       - app_network
     env_file:
       - .env
 
-  postgres:
+  db:
     image: postgres:latest
     restart: on-failure
     environment:
@@ -62,8 +86,6 @@ services:
       - ./nginx/logs/:/var/log/nginx/
       - static_volume:/ACCS/accs_app/staticfiles/
       - media_volume:/ACCS/accs_app/mediafiles/
-    depends_on:
-      - app
     networks:
       - app_network
     env_file:

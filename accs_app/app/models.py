@@ -2,12 +2,12 @@ import uuid
 from os.path import join
 from django.db import models
 from django.utils.timezone import now
-from django.contrib.auth.models import User
 from django_celery_results.models import TaskResult
 from django.core.validators import RegexValidator
 from tinymce import models as tinymce_models
 
 from models_collection.models import ModelInstance
+from users.models import User
 
 
 class Document(models.Model):
@@ -23,16 +23,16 @@ class Sex(models.TextChoices):
 
 # Create your models here.
 class Sample(models.Model):
-    def path(self, file):
+    def file_path(self, file):
         return join("tasks", str(self.id), "idats/", file)
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
     task = models.OneToOneField(
-        TaskResult, null=True, blank=True, on_delete=models.SET_NULL
+        TaskResult, null=True, blank=True, on_delete=models.CASCADE
     )
-    model = models.ForeignKey(ModelInstance, null=True, on_delete=models.SET_NULL)
 
+    model = models.ForeignKey(ModelInstance, null=True, on_delete=models.CASCADE)
     creation_date = models.DateTimeField(default=now)
 
     sample_name = models.CharField(max_length=50)
@@ -42,7 +42,7 @@ class Sample(models.Model):
     sex = models.CharField(choices=Sex.choices, max_length=7, blank=True, null=True)
 
     grn_idat = models.FileField(
-        upload_to=path,
+        upload_to=file_path,
         validators=[
             RegexValidator(
                 r".*_Grn.idat*",
@@ -52,7 +52,7 @@ class Sample(models.Model):
         ],
     )
     red_idat = models.FileField(
-        upload_to=path,
+        upload_to=file_path,
         validators=[
             RegexValidator(
                 r".*_Red.idat*",

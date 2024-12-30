@@ -46,13 +46,13 @@
                 <div class="col-md-3">
                     <p>
                         <a href="{% url 'accs-delete' sample.id %}">
-                            <button class="btn btn-outline-danger record-btn" style="min-width: 150px; margin: 3px">
+                            <button class="btn btn-outline-danger record-btn" style="min-width: 155px; margin: 3px">
                                 Delete task
                             </button>
                         </a>
                         <a href="{% url 'accs-update' sample.id %}">
-                            <button class="btn btn-outline-info record-btn" style="min-width: 150px; margin: 3px">Update
-                                task
+                            <button class="btn btn-outline-info record-btn" style="min-width: 155px; margin: 3px">
+                                Update task
                             </button>
                         </a>
                     </p>
@@ -60,14 +60,15 @@
                 <div class="col-md-3">
                     <p>
                         <button id="status-{{ sample.task.id }}" class="btn btn-outline-warning record-btn"
-                                style="min-width: 150px; margin: 3px; cursor: default;" disabled>
-                            Status: PENDING
+                                style="min-width: 155px; margin: 3px; cursor: default;" disabled>
+                                Status: PENDING
                         </button>
-                        <button id="report-{{ sample.task.id }}" class="btn btn-outline-info record-btn"
-                                style="min-width: 150px; margin: 3px" disabled>
-                            <a href="{% url 'accs-report' sample.id %}" style="text-decoration: none; color: inherit;">See
-                                report</a>
-                        </button>
+                        <a href="{% url 'accs-report' sample.id %}" style="text-decoration: none; color: inherit;">
+                            <button id="report-{{ sample.task.id }}" class="btn btn-outline-info record-btn"
+                                    style="min-width: 155px; margin: 3px" disabled>
+                                See report
+                            </button>
+                        </a>
                     </p>
                 </div>
             </div>

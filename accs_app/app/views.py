@@ -1,5 +1,7 @@
+import os
 import ast
 import json
+import requests
 from os.path import join
 
 from django.db.models import Q
@@ -8,6 +10,7 @@ from django.shortcuts import render
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 
 from django.views.generic import DeleteView, DetailView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -43,43 +46,41 @@ def legal_notice(request):
     return render(request, "app/legal_notice.html", context)
 
 
+@login_required(login_url="accs-login")
 def task_status(request):
-    if request.user.is_authenticated:
-        samples = Sample.objects.filter(user=request.user)
+    samples = Sample.objects.filter(user=request.user)
 
-        # Prepare the data to be returned
-        data = []
+    # Prepare the data to be returned
+    data = []
 
-        for sample in samples:
-            # Get the status from the associated TaskResult
-            if sample.task:
-                status = sample.task.status if sample.task.status else "-"
-                task_id = sample.task.id if sample.task.id else "-"
+    for sample in samples:
+        # Get the status from the associated TaskResult
+        if sample.task:
+            status = sample.task.status if sample.task.status else "-"
+            task_id = sample.task.id if sample.task.id else "-"
 
-                task_content = ast.literal_eval(sample.task.result)
-                prediction = task_content.get("Prediction", "-")
-                anomaly = task_content.get("Anomaly", "-")
-                confidence = task_content.get("Confidence")
+            task_content = ast.literal_eval(sample.task.result)
+            anomaly = task_content.get("Anomaly_status", "-")
+            prediction = task_content.get("Prediction", "-")
+            confidence = task_content.get("Confidence")
 
-                if confidence:
-                    confidence = round(max(confidence), 2)
-                else:
-                    confidence = "-"
+            if confidence:
+                confidence = round(confidence, 2)
+            else:
+                confidence = "-"
 
-                # Add the sample name and task status to the data list
-                data.append(
-                    {
-                        "task_id": task_id,
-                        "task_status": status,
-                        "prediction": prediction,
-                        "confidence": confidence,
-                        "anomaly": anomaly,
-                    }
-                )
+            # Add the sample name and task status to the data list
+            data.append(
+                {
+                    "task_id": task_id,
+                    "task_status": status,
+                    "prediction": prediction,
+                    "confidence": confidence,
+                    "anomaly": anomaly,
+                }
+            )
 
-        return JsonResponse(data, safe=False)
-
-    return JsonResponse({})
+    return JsonResponse(data, safe=False)
 
 
 class SamplesList(LoginRequiredMixin, ListView):
@@ -118,6 +119,7 @@ class SampleReport(LoginRequiredMixin, DetailView):
                 settings.MEDIA_ROOT,
                 settings.TASKS_PATH,
                 str(context["object"].id),
+                "results",
                 "pp.json",
             )
         ).to_html()
@@ -127,36 +129,35 @@ class SampleReport(LoginRequiredMixin, DetailView):
                 settings.MEDIA_ROOT,
                 settings.TASKS_PATH,
                 str(context["object"].id),
+                "results",
                 "ap.json",
             )
         ).to_html()
 
-        cnvs = read_json(
+        context["cnvs"] = read_json(
             join(
                 settings.MEDIA_ROOT,
                 settings.TASKS_PATH,
                 str(context["object"].id),
+                "results",
                 "cnvs.json",
             ),
             skip_invalid=True,
-        )
-        cnvs = cnvs.update_layout(
-            title="Estimated CNVs",
-            yaxis={"title": "log2 ratio of normalized intensities"},
-        )
-        context["cnvs"] = cnvs.to_html()
+        ).to_html()
 
         with open(
             join(
                 settings.MEDIA_ROOT,
                 settings.TASKS_PATH,
                 str(context["object"].id),
+                "results",
                 "predicted.json",
             )
         ) as file:
-            infer_from_idats = json.load(file)
-            context["PredictedSex"] = infer_from_idats["PredictedSex"][0]
-            context["Platform"] = infer_from_idats["Platform"][0]
+            predictions = json.load(file)
+            context["Predicted_sex"] = predictions["Predicted_sex"][0]
+            context["Predicted_platform"] = predictions["Predicted_platform"][0]
+
         return context
 
 

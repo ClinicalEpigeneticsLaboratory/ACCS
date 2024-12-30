@@ -10,7 +10,7 @@
         <div><small>Task id: {{ report.task.task_id }}</small></div>
         <div><small>Provided diagnosis: {{ report.diagnosis }}</small></div>
         <div><small>Model: {{ report.model.name }}</small></div>
-        <div><small>Platform: {{ Platform }}</small></div>
+        <div><small>Platform: {{ Predicted_platform }}</small></div>
         <hr>
     </div>
     <div class="row">
@@ -19,32 +19,32 @@
 
             {% if report.task.result|get_item:"Confidence_status" == 'High' %}
 
-            <p>Confidence: {{ report.task.result | get_item:"Max_confidence" }} {% bs_icon 'circle-fill' color='green' %}</p>
+            <p>Confidence: {{ report.task.result | get_item:"Confidence" | floatformat:2 }} {% bs_icon 'circle-fill' color='green' %}</p>
 
             {% elif report.task.result|get_item:"Confidence_status" == 'Medium' %}
 
-            <p>Confidence: {{ report.task.result | get_item:"Max_confidence" }} {% bs_icon 'circle-fill' color='yellow' %}</p>
+            <p>Confidence: {{ report.task.result | get_item:"Confidence" | floatformat:2 }} {% bs_icon 'circle-fill' color='yellow' %}</p>
 
             {% elif report.task.result|get_item:"Confidence_status" == 'Low' %}
 
-            <p>Confidence: {{ report.task.result | get_item:"Max_confidence" }} {% bs_icon 'circle-fill' color='orange' %}</p>
+            <p>Confidence: {{ report.task.result | get_item:"Confidence" | floatformat:2 }} {% bs_icon 'circle-fill' color='orange' %}</p>
 
             {% else %}
 
-            <p>Confidence: {{ report.task.result | get_item:"Max_confidence" }} {% bs_icon 'circle-fill' color='red' %}</p>
+            <p>Confidence: {{ report.task.result | get_item:"Confidence" | floatformat:2 }} {% bs_icon 'circle-fill' color='red' %}</p>
 
             {% endif %}
 
         </div>
         <div class="col-md-4 col-sm-12">
 
-            <p>Anomaly: {{ report.task.result | get_item:"Anomaly" }}</p>
+            <p>Anomaly: {{ report.task.result | get_item:"Anomaly_status" }}</p>
 
-            {% if report.task.result|get_item:'Anomaly' == 'Low-risk sample' %}
+            {% if report.task.result|get_item:'Anomaly_status' == 'Low-risk sample' %}
 
             <p>Anomaly score: {{ report.task.result | get_item:'Anomaly_score' | floatformat:2 }} {% bs_icon 'circle-fill' color='green' %}</p>
 
-            {% elif report.task.result|get_item:'Anomaly' == 'Medium-risk sample' %}
+            {% elif report.task.result|get_item:'Anomaly_status' == 'Medium-risk sample' %}
 
             <p>Anomaly score: {{ report.task.result | get_item:'Anomaly_score' | floatformat:2 }} {% bs_icon 'circle-fill' color='orange' %}</p>
 
@@ -58,42 +58,51 @@
         <div class="col-md-4 col-sm-12">
             <p>Age: {{ report.age }}</p>
             {% if report.sex %}
-            {% if report.sex == PredictedSex %}
+            {% if report.sex == Predicted_sex %}
 
-            <p>Sex declared: {{ report.sex }} vs predicted: {{ PredictedSex }} {% bs_icon 'circle-fill' color='green' %} </p>
+            <p>Sex declared: {{ report.sex }} vs predicted: {{ Predicted_sex }} {% bs_icon 'circle-fill' color='green' %} </p>
 
             {% else %}
 
-            <p>Sex declared: {{ report.sex }} vs predicted: {{ PredictedSex }} {% bs_icon 'circle-fill' color='red' %} </p>
+            <p>Sex declared: {{ report.sex }} vs predicted: {{ Predicted_sex }} {% bs_icon 'circle-fill' color='red' %} </p>
 
             {% endif %}
 
             {% else%}
 
-            <p>Sex predicted: {{ PredictedSex }}</p>
+            <p>Sex predicted: {{ Predicted_sex }}</p>
 
             {% endif %}
         </div>
     </div>
 </div>
 
-<div id="spinner" class="d-flex justify-content-center">
-    <div class="spinner-border text-info" style="width: 3rem; height: 3rem;" role="status">
-        <span class="sr-only"></span>
+<div class="row">
+    <div id="spinner-row-one" class="d-flex justify-content-center" style="margin: 2%">
+        <div class="spinner-border text-info" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only"></span>
+        </div>
     </div>
-</div>
 
-<div class="row" id="plots-a" style="visibility: hidden">
-    <div class="col-md-8 col-sm-12">
+    <div class="col-md-8 col-sm-12" id="plot-a" style="visibility: hidden">
         {{ pp | safe }}
     </div>
-    <div class="col-md-4 col-sm-12">
+
+    <div class="col-md-4 col-sm-12" id="plot-b" style="visibility: hidden">
         {{ ap | safe }}
     </div>
 </div>
 
-<div class="row" id="plots-b" style="visibility: hidden">
-    <div class="col-md-12">
+<hr>
+
+<div class="row">
+    <div id="spinner-row-two" class="d-flex justify-content-center" style="margin: 2%">
+        <div class="spinner-border text-info" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only"></span>
+        </div>
+    </div>
+
+    <div class="col-md-12" id="plot-c" style="visibility: hidden">
         {{ cnvs | safe }}
     </div>
 </div>
@@ -103,9 +112,12 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Spinner:', document.getElementById('spinner'));
     console.log('Plots:', document.getElementById('plots'));
 
-    document.getElementById('spinner').style.setProperty('display', 'none', 'important');
-    document.getElementById('plots-a').style.setProperty('visibility', 'visible', 'important');
-    document.getElementById('plots-b').style.setProperty('visibility', 'visible', 'important');
+    document.getElementById('spinner-row-one').style.setProperty('display', 'none', 'important');
+    document.getElementById('spinner-row-two').style.setProperty('display', 'none', 'important');
+
+    document.getElementById('plot-a').style.setProperty('visibility', 'visible', 'important');
+    document.getElementById('plot-b').style.setProperty('visibility', 'visible', 'important');
+    document.getElementById('plot-c').style.setProperty('visibility', 'visible', 'important');
 
 });
 </script>

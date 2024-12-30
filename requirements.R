@@ -1,4 +1,4 @@
-options(Ncpus = 8)
+options(Ncpus = 10)
 
 install.packages(c("devtools", "arrow", "randomForest", "jsonlite", "htmlwidgets", "ggplot2", "plotly", "BiocManager"))
 

@@ -36,7 +36,7 @@ cert/
 **/charts
 **/docker-compose*
 **/compose*
-**/Dockerfile*
+model-images/model-one/Dockerfile
 **/node_modules
 **/npm-debug.log
 **/obj

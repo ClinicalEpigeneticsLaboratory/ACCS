@@ -18,7 +18,7 @@
                         <form method="POST">
                             {% csrf_token %}
                             <fieldset class="form-group">
-                                {{ form | crispy }}
+                                {{ form | crispy | safe }}
                             </fieldset>
                             <div class="form-group mt-4">
                                 <button class="col-12 btn btn-outline-info" type="submit">Sign Up</button>
