@@ -49,7 +49,10 @@ services:
   flower:
     image: mher/flower
     restart: on-failure
-    command: celery --broker=redis://:${REDIS_PASS}@${REDIS_HOST}:${REDIS_PORT}/0 flower --basic-auth=${FLOWER_USER}:${FLOWER_PASS} --port=${FLOWER_PORT} --url_prefix=flower
+    command: celery --broker=redis://:${REDIS_PASS}@${REDIS_HOST}:${REDIS_PORT}/0 flower \
+             --basic-auth="${FLOWER_USER}":"${FLOWER_PASS}" \ 
+             --port=${FLOWER_PORT} \
+             --url_prefix=${FLOWER_ENDPOINT}
     depends_on:
       - redis
       - celery_worker
