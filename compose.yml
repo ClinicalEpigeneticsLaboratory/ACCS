@@ -7,8 +7,6 @@ services:
         UID: 1001
         GID: 1001
     restart: always
-    ports:
-      - 8888:8000
     networks:
       - app_network
     volumes:
@@ -50,8 +48,6 @@ services:
   flower:
     image: mher/flower
     restart: on-failure
-    ports:
-      - 5555:5555
     command: celery --broker=redis://:${REDIS_PASS}@${REDIS_HOST}:${REDIS_PORT}/0 flower --basic-auth=${FLOWER_USER}:${FLOWER_PASS} --port=${FLOWER_PORT} --url_prefix=${FLOWER_ENDPOINT}
     depends_on:
       - redis
