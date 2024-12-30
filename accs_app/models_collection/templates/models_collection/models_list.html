@@ -1,0 +1,47 @@
+{% extends "app/base.html" %}
+{% load filters %}
+
+{% block content %}
+
+{% if models %}
+<div class="container">
+    <h2>
+        Registered models:
+    </h2>
+
+    {% for model in models %}
+    <div class="row justify-content-center" style="padding-right: 2%; padding-left: 2%">
+        <div class="accordion" id="accordionExample-{{ forloop.counter }}">
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="heading-{{ forloop.counter }}">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ forloop.counter }}" aria-expanded="true" aria-controls="collapse-{{ forloop.counter }}">
+                {{ model.name }}
+              </button>
+            </h2>
+            <div id="collapse-{{ forloop.counter }}" class="accordion-collapse collapse" aria-labelledby="heading-{{ forloop.counter }}" data-bs-parent="#accordionExample-{{ forloop.counter }}">
+              <div class="accordion-body">
+                  <p><strong>Name: </strong> {{ model.name }}</p>
+                  <p><strong>Type: </strong> {{ model.model_type }}</p>
+                  <hr>
+                  <p><strong>Creation date: </strong> {{ model.creation_date }}</p>
+                  <p><strong>Description: </strong> {{ model.description }}</p>
+                  <p><strong>Model evaluations score: </strong> {{ model.evaluation_metric }} [{{ model.evaluation_metric_type }}]</p>
+                  <p><strong>Source: </strong> <a href="{{ model.remote_repository }}" target="_blank"> {{ model.remote_repository }} </a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+    {% endfor %}
+
+{% else %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
+            <p>No models registered.</p>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% endblock content %}
