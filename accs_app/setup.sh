@@ -10,4 +10,4 @@ echo "----------- Add superuser --------- "
 python manage.py createsuperuser --no-input
 
 echo "----------- Add superuser --------- "
-python -m gunicorn 'accs_app.wsgi' --bind=0.0.0.0:8000 --timeout 60 --workers=2
+python -m gunicorn 'accs_app.wsgi' --bind=0.0.0.0:8000 --timeout 60 --workers=1
