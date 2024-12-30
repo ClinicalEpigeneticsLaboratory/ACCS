@@ -16,7 +16,7 @@ services:
       - media_volume:/ACCS/accs_app/mediafiles/
       - static_volume:/ACCS/accs_app/staticfiles/
     depends_on:
-      # - nginx
+      - nginx
       - redis
       - db
     env_file:
