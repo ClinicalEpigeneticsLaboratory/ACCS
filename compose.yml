@@ -52,7 +52,7 @@ services:
     restart: on-failure
     ports:
       - 5555:5555
-    command: celery --broker=redis://:${REDIS_PASS}@${REDIS_HOST}:${REDIS_PORT}/0 flower --basic-auth=${FLOWER_USER}:${FLOWER_PASS} --port=${FLOWER_PORT} --url_prefix=flower
+    command: celery --broker=redis://:${REDIS_PASS}@${REDIS_HOST}:${REDIS_PORT}/0 flower --basic-auth=${FLOWER_USER}:${FLOWER_PASS} --port=${FLOWER_PORT} --url_prefix=${FLOWER_ENDPOINT}
     depends_on:
       - redis
       - celery_worker
@@ -73,23 +73,23 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-#  nginx:
-#    image: nginx:latest
-#    restart: on-failure
-#    ports:
-#      - "80:80"
-#      - "443:443"
-#    volumes:
-#      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-#      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
-#      - ./nginx/cert/:/etc/ssl/certs/
-#      - ./nginx/logs/:/var/log/nginx/
-#      - static_volume:/ACCS/accs_app/staticfiles/
-#      - media_volume:/ACCS/accs_app/mediafiles/
-#    networks:
-#      - app_network
-#    env_file:
-#      - .env
+  nginx:
+    image: nginx:latest
+    restart: on-failure
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/cert/:/etc/ssl/certs/
+      - ./nginx/logs/:/var/log/nginx/
+      - static_volume:/ACCS/accs_app/staticfiles/
+      - media_volume:/ACCS/accs_app/mediafiles/
+    networks:
+      - app_network
+    env_file:
+      - .env
 
 networks:
   app_network:
