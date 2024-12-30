@@ -52,6 +52,7 @@ services:
     depends_on:
       - redis
       - celery_worker
+      - nginx
     networks:
       - app_network
     env_file:
