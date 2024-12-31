@@ -1,7 +1,5 @@
-import os
 import ast
 import json
-import requests
 from os.path import join
 
 from django.db.models import Q
@@ -41,7 +39,7 @@ def about(request):
 def legal_notice(request):
     context = {
         "title": "Legal notice",
-        "document": Document.objects.filter(name="legal-nothice").first(),
+        "document": Document.objects.filter(name="legal-notice").first(),
     }
     return render(request, "app/legal_notice.html", context)
 
@@ -195,6 +193,7 @@ class SampleDelete(LoginRequiredMixin, DeleteView):
     model = Sample
     template_name = "app/delete.html"
     redirect_field_name = "accs-login"
+    success_message = f"Sample {model.sample_name} has been successfully deleted."
 
     def get_queryset(self):
         return Sample.objects.filter(user=self.request.user)
