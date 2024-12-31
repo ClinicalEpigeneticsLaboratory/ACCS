@@ -29,6 +29,7 @@ pandas = "^2.2.3"
 joblib = "^1.4.2"
 scikit-learn = "1.5.0"
 pyarrow = "^18.1.0"
+slack-sdk = "^3.34.0"
 
 [tool.poetry.group.dev.dependencies]
 html-linter = "^0.4.0"
