@@ -1,11 +1,14 @@
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.shortcuts import render, redirect
+from django.views.generic.edit import DeleteView
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.views import PasswordResetView, PasswordResetCompleteView
 
+from .models import User
 from .forms import (
     UserRegisterForm,
     UserUpdateForm,
@@ -96,6 +99,17 @@ def register(request):
     return render(
         request, "users/register.html", {"form": form, "title": "Registration page"}
     )
+
+
+class UserDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+    model = User
+    redirect_field_name = "accs-login"
+    template_name = "users/delete.html"
+    success_message = "The account has been deleted successfully."
+    success_url = reverse_lazy("accs-home")
+
+    def get_object(self, queryset=None):
+        return self.request.user
 
 
 class ResetPasswordView(SuccessMessageMixin, PasswordResetView):

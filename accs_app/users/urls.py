@@ -7,6 +7,11 @@ urlpatterns = [
     path("profile/", views.profile_update, name="accs-profile"),
     path("update-password/", views.password_update, name="accs-update-password"),
     path(
+        "account-delete/",
+        views.UserDeleteView.as_view(),
+        name="accs-delete-account",
+    ),
+    path(
         "password-reset/",
         views.ResetPasswordView.as_view(),
         name="accs-reset-password",
