@@ -16,7 +16,6 @@
                             {% csrf_token %}
                             <fieldset class="form-group">
                                 {{ user_update_form|crispy }}
-                                {{ profile_update_form|crispy }}
                             </fieldset>
                             <div class="form-group mt-4">
                                 <button class="col-12 btn btn-outline-info" type="submit">Update</button>
@@ -26,8 +25,10 @@
                     <div class="card-footer text-center">
                         <div class="small">
                             <a href="{% url 'accs-update-password' %}">Change password?</a>
-                            <hr>
-                            <a href="{% url 'accs-reset-password' %}">Forgot password?</a>
+                        </div>
+                        <hr>
+                        <div class="small">
+                            <a href="{% url 'accs-delete-account' %}">Delete account?</a>
                         </div>
                     </div>
                 </div>
