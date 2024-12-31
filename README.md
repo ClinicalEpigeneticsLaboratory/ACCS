@@ -28,6 +28,8 @@ MbCC's architecture leverages containerization to ensure modularity, scalability
 
 - **Celery** - Celery is employed for task queuing, enabling the asynchronous execution of long-running processes such as raw data processing, quality control, and prediction pipelines.
 
+- **Flower** - Application for monitoring and managing Celery clusters.
+
 - **Redis** - Redis serves as the message broker for Celery, facilitating fast and reliable communication between the task queue and worker processes.
 
 - **Postgres** - The PostgreSQL database is the main storage backend for MbCC, used for maintaining user data, metadata, model registries, and results generated during analysis.
@@ -39,42 +41,56 @@ MbCC's architecture leverages containerization to ensure modularity, scalability
 
 1. create .env file comprising all listed below variables:
 
-    ```
-    #DJANGO
-    DEBUG=
-    ALLOWED_HOSTS=
-    CSRF_TRUSTED_ORIGINS=
-    SECRET_KEY=
-    DJANGO_SUPERUSER_PASSWORD=
-    DJANGO_SUPERUSER_USERNAME=
-    DJANGO_SUPERUSER_EMAIL=
-    
-    #POSTGRES
-    DB_HOST=
-    DB_USER=
-    DB_PASS=
-    DB_NAME=
-    DB_PORT=
-    
-    #REDIS
-    REDIS_HOST=
-    REDIS_PASS=
-    REDIS_PORT=
-    
-    #SMTP
-    EMAIL=
-    EMAIL_PASS=
-    ```
+```
+# DJANGO
+DEBUG=
+ALLOWED_HOSTS=
+CSRF_TRUSTED_ORIGINS=
+SECRET_KEY=
+DJANGO_SUPERUSER_PASSWORD=
+DJANGO_SUPERUSER_USERNAME=
+DJANGO_SUPERUSER_EMAIL=
+
+# POSTGRES
+DB_HOST=
+DB_USER=
+DB_PASS=
+DB_NAME=
+DB_PORT=
+
+# REDIS
+REDIS_HOST=
+REDIS_PASS=
+REDIS_PORT=
+
+# FLOWER
+FLOWER_HOST=
+FLOWER_UNAUTHENTICATED_API=
+FLOWER_PORT=
+FLOWER_USER=
+FLOWER_PASS=
+FLOWER_ENDPOINT=
+
+# SMTP
+EMAIL=
+EMAIL_PASS=
+
+# SLACK
+SLACK_TOKEN=
+
+# TIME
+TZ=
+```
 
 2. Set up containers
 
-    ```
-    # Works only when docker has root-level privileges
-    docker compose up --detach
-    
-    # Otherwise
-    sudo docker compose up --detach
-    ```
+ ```
+ # Works only when docker has root-level privileges
+ docker compose up --detach
+ 
+ # Otherwise
+ sudo docker compose up --detach
+ ```
 
 #### Volumes and Networks
 
@@ -91,19 +107,20 @@ MbCC's architecture leverages containerization to ensure modularity, scalability
 #### Nginx
 The Nginx server acts as a reverse proxy for the MbCC application, managing secure connections and static file serving. Below are the key aspects of the configuration:
 
-**Server**
+**Nginx Server**
 - Upstream App - The upstream block defines the application server, which is the main Django application container.
 - HTTP Redirection - Requests made over HTTP are redirected to HTTPS, ensuring all traffic is encrypted.
 - HTTPS Configuration - Handles secure HTTPS connections.  SSL/TLS certificates (*.pem and *.key) are used to enable encryption, ensuring data security.
 - Strict-Transport-Security (HSTS) is enabled to enforce HTTPS for all subsequent requests.
 - client_max_body_size is set to 200M to allow uploading larger files, such as omics data files.
 
-**Locations**
+**Nginx Locations**
 - Root (/) - Proxies all requests to the upstream app server. 
-- Static Files (/static/) - Static files, such as CSS and JavaScript, are served directly from /ACCS/accs_app/staticfiles/ to optimize performance.
-- Media Files (/media/) - User-uploaded media files are served directly from /ACCS/accs_app/mediafiles/.
+- Flower (/flower/) - Proxies specific requests to the upstream flower server.
+- Static Files (/static/) - Static files, such as CSS and JavaScript.
+- Media Files (/media/) - User-uploaded media files.
 
-**Logging**
+**Nginx Logging**
 - Access logs are written to /var/log/nginx/access.log.
 - Error logs are recorded in /var/log/nginx/error.log.
 
@@ -111,10 +128,8 @@ The Nginx server acts as a reverse proxy for the MbCC application, managing secu
 Celery is a key component of the MbCC application, managing asynchronous task execution and enabling efficient handling of computational workloads. 
 With Redis, celery supports for autoscaling, task tracking, and logging.
 
+#### Model registry
+Each model is a [Nextflow](https://www.nextflow.io/) pipeline designed to load, parse and normalize 
+user-uploaded data, and finally, make predictions.
 
-### TODO part one
-Currently, MbCC employs a straightforward preprocessing strategy where data preprocessing is handled by external R/Python scripts executed as part of Celery tasks. While this approach is effective for managing a single model, it poses scalability challenges when dealing with a large number of models, especially if each model requires a distinct data preprocessing pipeline.
-To address this limitation, in next release i will add nextflow support what should solve this problem.
-
-### TODO part two
-Right now celery works on the same container as main Django app, it was ok so far but should be changed.
+All registered models are listed [here](https://mbcc.pum.edu.pl/models-collection).
