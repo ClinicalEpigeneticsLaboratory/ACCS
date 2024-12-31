@@ -229,3 +229,6 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = os.getenv("EMAIL", default="user")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_PASS", default="pass")
 EMAIL_USE_TLS = True
+
+# SLACK
+SLACK_TOKEN = os.getenv("SLACK_TOKEN")
