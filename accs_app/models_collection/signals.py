@@ -14,7 +14,7 @@ from .models import ModelInstance
 def pull_model_repo(sender, instance, created, **kwargs):
     model_remote_repository = instance.remote_repository
     model_destination_path = join(
-        settings.MEDIA_ROOT, settings.ARTIFACTS_PATH, instance.name
+        settings.MEDIA_ROOT, settings.ARTIFACTS_PATH, str(instance.model_id)
     )
     if created:
         subprocess.run(
@@ -34,6 +34,6 @@ def pull_model_repo(sender, instance, created, **kwargs):
 @receiver(post_delete, sender=ModelInstance)
 def delete_model_local_repo(sender, instance, **kwargs):
     model_destination_path = join(
-        settings.MEDIA_ROOT, settings.ARTIFACTS_PATH, instance.name
+        settings.MEDIA_ROOT, settings.ARTIFACTS_PATH, str(instance.model_id)
     )
     rmtree(model_destination_path)

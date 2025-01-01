@@ -1,3 +1,4 @@
+import uuid
 import requests
 from django.db import models
 from django.utils.timezone import now
@@ -60,6 +61,7 @@ class ModelInstance(models.Model):
         ("OTHER", "Other"),
     ]
 
+    model_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=50, unique=True, validators=[validate_no_slash])
     creation_date = models.DateTimeField(default=now)
 
