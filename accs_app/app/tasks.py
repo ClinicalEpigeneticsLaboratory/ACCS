@@ -13,7 +13,7 @@ from .models import Sample
 @shared_task(bind=True)
 def process_single_sample(self, sample_id: uuid4, user_name: str) -> dict:
     sample = Sample.objects.get(id=sample_id)
-    model_workflow = sample.model.name
+    model_workflow = str(sample.model.model_id)
 
     task = TaskResult.objects.get(
         task_id=self.request.id
@@ -24,7 +24,7 @@ def process_single_sample(self, sample_id: uuid4, user_name: str) -> dict:
     workflow_directory = join(
         settings.MEDIA_ROOT,
         settings.ARTIFACTS_PATH,
-        str(model_workflow),
+        model_workflow,
     )
     task_directory = join(settings.MEDIA_ROOT, settings.TASKS_PATH, str(sample_id))
 
