@@ -68,11 +68,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "accs_app.urls"
-
-if DEBUG:
-    CSRF_TRUSTED_ORIGINS = ["http://localhost"]
-else:
-    CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")
+CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")
 
 TEMPLATES = [
     {
