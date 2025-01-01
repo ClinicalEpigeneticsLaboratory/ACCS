@@ -1,7 +1,4 @@
 from django.urls import path
-from django.conf import settings
-from django.conf.urls.static import static
-from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 from .views import (
     SamplesList,
@@ -23,6 +20,3 @@ urlpatterns = [
     path("delete/<uuid:pk>/", SampleDelete.as_view(), name="accs-delete"),
     path("update/<uuid:pk>/", SampleUpdate.as_view(), name="accs-update"),
 ]
-
-if settings.DEBUG:
-    urlpatterns += staticfiles_urlpatterns()
