@@ -2,6 +2,8 @@
 The Methylation-based Cancer Classifier (MbCC) is a model registry designed to serve scikit-learn-based machine learning models for omics data, primarily focusing on DNA methylation profiles. 
 MbCC provides a user-friendly interface enabling interaction with registered models for data submission, analysis, and secure storage of the generated results.
 
+![architecture.svg](readme/architecture.svg)
+
 #### Inference Pipelines
 Each sample submitted to MbCC undergoes a standardized, model-specific processing pipeline. The inference pipeline is designed to ensure high data quality, comparability, and accuracy of predictions. It consists of the following steps:
 
