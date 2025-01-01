@@ -3,7 +3,7 @@ from .models import Sample, Document
 
 
 class SampleAdmin(admin.ModelAdmin):
-    list_display = ["sample_name", "user", "creation_date", "task"]
+    list_display = ["pk", "sample_name", "user", "creation_date", "task"]
 
 
 class DocumentAdmin(admin.ModelAdmin):
