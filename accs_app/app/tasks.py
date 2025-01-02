@@ -44,7 +44,7 @@ def process_single_sample(self, sample_id: uuid4, user_name: str) -> dict:
     )
 
     results_directory = join(task_directory, "results/")
-    with open(join(results_directory, "predicted.json"), "r") as file:
+    with open(join(results_directory, "results.json"), "r") as file:
         results = json.load(file)
 
     results["Sample_name"] = sample.sample_name
