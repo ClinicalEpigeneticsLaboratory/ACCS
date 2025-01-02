@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="row" style="padding: 15px">
-    <div class="col-md-12 col-sm-12">
+    <div class="col-12">
         <h5>Sample name: {{ report.sample_name }}</h5>
         <div><small>Creation date: {{ report.creation_date }}</small></div>
         <div><small>Task id: {{ report.task.task_id }}</small></div>
@@ -84,11 +84,15 @@
         </div>
     </div>
 
-    <div class="col-md-8 col-sm-12" id="plot-a" style="visibility: hidden">
+    <div class="col-md-6 col-sm-12" id="plot-a" style="visibility: hidden">
         {{ pp | safe }}
     </div>
 
-    <div class="col-md-4 col-sm-12" id="plot-b" style="visibility: hidden">
+    <div class="col-md-3 col-sm-12" id="plot-b" style="visibility: hidden">
+        {{ nf | safe }}
+    </div>
+
+    <div class="col-md-3 col-sm-12" id="plot-c" style="visibility: hidden">
         {{ ap | safe }}
     </div>
 </div>
@@ -102,7 +106,7 @@
         </div>
     </div>
 
-    <div class="col-md-12" id="plot-c" style="visibility: hidden">
+    <div class="col-md-12" id="plot-d" style="visibility: hidden">
         {{ cnvs | safe }}
     </div>
 </div>
@@ -118,6 +122,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('plot-a').style.setProperty('visibility', 'visible', 'important');
     document.getElementById('plot-b').style.setProperty('visibility', 'visible', 'important');
     document.getElementById('plot-c').style.setProperty('visibility', 'visible', 'important');
+    document.getElementById('plot-d').style.setProperty('visibility', 'visible', 'important');
 
 });
 </script>

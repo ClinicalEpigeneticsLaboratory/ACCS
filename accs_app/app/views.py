@@ -132,6 +132,16 @@ class SampleReport(LoginRequiredMixin, DetailView):
             )
         ).to_html()
 
+        context["nf"] = read_json(
+            join(
+                settings.MEDIA_ROOT,
+                settings.TASKS_PATH,
+                str(context["object"].id),
+                "results",
+                "nanf.json",
+            )
+        ).to_html()
+
         context["cnvs"] = read_json(
             join(
                 settings.MEDIA_ROOT,
@@ -149,7 +159,7 @@ class SampleReport(LoginRequiredMixin, DetailView):
                 settings.TASKS_PATH,
                 str(context["object"].id),
                 "results",
-                "predicted.json",
+                "results.json",
             )
         ) as file:
             predictions = json.load(file)
