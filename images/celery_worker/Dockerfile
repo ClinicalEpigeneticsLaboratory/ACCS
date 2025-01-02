@@ -66,5 +66,5 @@ RUN chmod -R 755 $EXPERIMENT_HUB_CACHE
 # Switch to the non-privileged user to run the application
 USER appuser
 
-# Run cellery
-ENTRYPOINT ["python3.10", "-m", "celery", "--app=accs_app.celery", "worker", "--pool=eventlet", "--autoscale=3,1", "-E"]
+# Entrypoint
+ENTRYPOINT ["/usr/bin/sh"]
