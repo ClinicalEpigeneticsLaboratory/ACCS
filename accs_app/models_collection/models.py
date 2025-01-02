@@ -3,6 +3,7 @@ import requests
 from django.db import models
 from django.utils.timezone import now
 from django.core.exceptions import ValidationError
+from django.contrib.postgres.fields import JSONField
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 
@@ -81,6 +82,16 @@ class ModelInstance(models.Model):
         validators=[validate_url_exists, validate_github_repo],
         null=False,
     )
+
+    def metadata_default():
+        return {
+            "Model": "",
+            "Number of features": "",
+            "Number of classes": "",
+            "Classes": "",
+        }
+
+    metadata = models.JSONField(default=metadata_default)
 
     def __str__(self):
         return self.name

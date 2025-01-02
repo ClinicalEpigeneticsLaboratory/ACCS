@@ -1,8 +1,9 @@
+import json
 import subprocess
+from glob import glob
 from os.path import join
 from shutil import rmtree
 from os.path import exists
-from glob import glob
 
 from django.db.models.signals import post_save, post_delete
 from django.conf import settings
@@ -29,6 +30,14 @@ def pull_model_repo(sender, instance, created, **kwargs):
 
             for file in [*executables_r, *executables_py]:
                 subprocess.run(["chmod", "+x", file], check=True, shell=False)
+
+        model_metadata = join(model_destination_path, "metadata.json")
+
+        if exists(model_metadata):
+            with open(model_metadata, "r") as file:
+                model_metadata = json.load(file)
+                instance.metadata = model_metadata
+                instance.save()
 
 
 @receiver(post_delete, sender=ModelInstance)
