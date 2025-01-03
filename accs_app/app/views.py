@@ -11,6 +11,7 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 
 from django.views.generic import DeleteView, DetailView, CreateView, UpdateView
+from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.list import ListView
 from plotly.io import read_json
@@ -169,12 +170,10 @@ class SampleReport(LoginRequiredMixin, DetailView):
         return context
 
 
-class SampleSubmit(LoginRequiredMixin, CreateView):
+class SampleSubmit(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Sample
     template_name = "app/submit.html"
-    redirect_field_name = "accs-history"
     success_url = reverse_lazy("accs-history")
-
     fields = [
         "sample_name",
         "diagnosis",
@@ -184,6 +183,7 @@ class SampleSubmit(LoginRequiredMixin, CreateView):
         "grn_idat",
         "red_idat",
     ]
+    success_message = ""
 
     def form_valid(self, form):
         sample = form.save(commit=False)
@@ -191,19 +191,20 @@ class SampleSubmit(LoginRequiredMixin, CreateView):
         sample.save()
 
         process_single_sample.delay_on_commit(sample.id, self.request.user.id)
-
-        messages.success(
-            self.request,
-            f"New analysis has successfully added to queue.",
-        )
         return super().form_valid(form)
 
+    def get_success_url(self):
+        return reverse_lazy("accs-history")
 
-class SampleDelete(LoginRequiredMixin, DeleteView):
+    def get_success_message(self, _):
+        sample = self.object
+        return f"Sample {sample.sample_name} has been successfully added to queue."
+
+
+class SampleDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     model = Sample
     template_name = "app/delete.html"
-    redirect_field_name = "accs-login"
-    success_message = f"Sample {model.sample_name} has been successfully deleted."
+    success_message = ""
 
     def get_queryset(self):
         return Sample.objects.filter(user=self.request.user)
@@ -211,12 +212,17 @@ class SampleDelete(LoginRequiredMixin, DeleteView):
     def get_success_url(self):
         return reverse_lazy("accs-history")
 
+    def get_success_message(self, _):
+        # Access the instance of the object that was deleted
+        sample = self.object  # `self.object` contains the deleted object
+        return f"Sample {sample.sample_name} has been successfully deleted."
 
-class SampleUpdate(LoginRequiredMixin, UpdateView):
+
+class SampleUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Sample
     template_name = "app/update.html"
-    redirect_field_name = "accs-login"
     fields = ["sample_name", "diagnosis", "age", "sex"]
+    success_message = ""
 
     def get_queryset(self):
         return Sample.objects.filter(user=self.request.user)
@@ -224,9 +230,6 @@ class SampleUpdate(LoginRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse_lazy("accs-history")
 
-    def form_valid(self, form):
-        messages.success(
-            self.request,
-            f"Sample {form.cleaned_data['sample_name']} has been updated successfully.",
-        )
-        return super().form_valid(form)
+    def get_success_message(self, _):
+        sample = self.object
+        return f"Sample {sample.sample_name} has been successfully updated."
