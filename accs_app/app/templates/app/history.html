@@ -63,7 +63,7 @@
                                 style="min-width: 155px; margin: 3px; cursor: default;" disabled>
                                 Status: PENDING
                         </button>
-                        <a href="{% url 'accs-report' sample.id %}" style="text-decoration: none; color: inherit;">
+                        <a href="{% url 'accs-report' sample.id %}" id="report-link-{{ sample.task.id }}" style="pointer-events: none; text-decoration: none; color: inherit;">
                             <button id="report-{{ sample.task.id }}" class="btn btn-outline-info record-btn"
                                     style="min-width: 155px; margin: 3px" disabled>
                                 See report
@@ -131,6 +131,7 @@
                 // Get references to the status and report buttons
                 const statusButton = document.getElementById(`status-${taskID}`);
                 const reportButton = document.getElementById(`report-${taskID}`);
+                const reportLink = document.getElementById(`report-link-${taskID}`);
 
                 const predictionField = document.getElementById(`prediction-${taskID}`);
                 const confidenceField = document.getElementById(`confidence-${taskID}`);
@@ -142,6 +143,8 @@
                     statusButton.innerText = `Status: ${task_status}`;
                     reportButton.disabled = false;
 
+                    reportLink.style.pointerEvents = 'auto';
+
                     predictionField.innerText = `Prediction: ${element.prediction}`;
                     confidenceField.innerText = `Confidence: ${element.confidence}`;
                     anomalyField.innerText = `Anomaly: ${element.anomaly}`;
@@ -152,6 +155,8 @@
                     statusButton.innerText = `Status: ${task_status}`;
                     reportButton.disabled = true;
 
+                    reportLink.style.pointerEvents = 'none';
+                    
                     predictionField.innerText = `Prediction: -`;
                     confidenceField.innerText = `Confidence: -`;
                     anomalyField.innerText = `Anomaly: -`;
