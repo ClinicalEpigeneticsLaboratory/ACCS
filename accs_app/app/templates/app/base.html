@@ -41,7 +41,8 @@
             {% if user.is_authenticated %}
 
             <div class="navbar-nav nav-justified-right">
-                <!-- Modal Trigger Button -->
+                <button type="button" class="btn btn-secondary" disabled>{{ user.username }}</button>
+
                 <a href="{% url 'accs-history' %}">
                     <button class="btn btn-outline-danger" style="min-width: 80px">History</button>
                 </a>
