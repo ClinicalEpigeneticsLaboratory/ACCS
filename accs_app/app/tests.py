@@ -13,7 +13,7 @@ class SampleModelTest(TestCase):
         self.user = User.objects.create(username="testuser", password="password123")
         self.sample_data = {
             "user": self.user,
-            "sample_name": "Sample1",
+            "sample_name": "TestSample",
             "diagnosis": "Healthy",
             "age": 30,
             "sex": Sex.Male,
@@ -21,7 +21,7 @@ class SampleModelTest(TestCase):
 
     def test_sample_creation(self):
         sample = Sample.objects.create(**self.sample_data)
-        self.assertEqual(sample.sample_name, "Sample1")
+        self.assertEqual(sample.sample_name, "TestSample")
         self.assertEqual(sample.diagnosis, "Healthy")
         self.assertEqual(sample.age, 30)
         self.assertEqual(sample.sex, Sex.Male)
@@ -40,8 +40,8 @@ class SampleModelTest(TestCase):
         self.sample_data.update({"grn_idat": invalid_file, "red_idat": invalid_file})
 
         sample = Sample(**self.sample_data)
-        with self.assertRaises(Exception):  # Expecting validation to fail
-            sample.full_clean()  # Manually trigger validation
+        with self.assertRaises(Exception):
+            sample.full_clean()
 
 
 class SampleSignalTest(TestCase):
@@ -49,7 +49,7 @@ class SampleSignalTest(TestCase):
         self.user = User.objects.create(username="testuser", password="password123")
         self.sample = Sample.objects.create(
             user=self.user,
-            sample_name="Sample1",
+            sample_name="TestSample",
             diagnosis="Healthy",
             age=30,
             sex=Sex.Male,
@@ -62,7 +62,7 @@ class SampleSignalTest(TestCase):
     def test_slack_notification_on_create(self, mock_slack):
         new_sample = Sample.objects.create(
             user=self.user,
-            sample_name="Sample2",
+            sample_name="TestSample",
             diagnosis="Disease",
             age=25,
             sex=Sex.Female,
@@ -75,12 +75,9 @@ class SampleSignalTest(TestCase):
         )
 
     def test_delete_sample(self):
-        sample_path = join(
-            settings.MEDIA_ROOT, settings.TASKS_PATH, str(self.sample.id)
-        )
-        exists_before_delete = exists(sample_path)
+        exists_before_delete = exists(self.sample_path)
         self.assertTrue(exists_before_delete)
 
         self.sample.delete()
-        exists_after_delete = exists(sample_path)
+        exists_after_delete = exists(self.sample_path)
         self.assertFalse(exists_after_delete)
