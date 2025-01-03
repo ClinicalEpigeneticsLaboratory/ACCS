@@ -1,8 +1,9 @@
-from django.test import TestCase
+from os.path import join, exists
+from unittest.mock import patch
+
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.test import TestCase
 from django.conf import settings
-from unittest.mock import patch, Mock
-from os.path import join
 
 from .models import Sample, User, Sex
 
@@ -38,8 +39,9 @@ class SampleModelTest(TestCase):
         invalid_file = SimpleUploadedFile("invalid_file.txt", b"dummy content")
         self.sample_data.update({"grn_idat": invalid_file, "red_idat": invalid_file})
 
-        with self.assertRaises(Exception):
-            Sample.objects.create(**self.sample_data)
+        sample = Sample(**self.sample_data)
+        with self.assertRaises(Exception):  # Expecting validation to fail
+            sample.full_clean()  # Manually trigger validation
 
 
 class SampleSignalTest(TestCase):
@@ -58,7 +60,6 @@ class SampleSignalTest(TestCase):
 
     @patch("slack_sdk.WebClient.chat_postMessage")
     def test_slack_notification_on_create(self, mock_slack):
-        mock_slack.return_value = Mock(ok=True)
         new_sample = Sample.objects.create(
             user=self.user,
             sample_name="Sample2",
@@ -73,7 +74,13 @@ class SampleSignalTest(TestCase):
             text=f"New sample - {new_sample.sample_name} has been added to queue by {new_sample.user.username}.",
         )
 
-    @patch("shutil.rmtree")
-    def test_delete_sample(self, mock_rmtree):
+    def test_delete_sample(self):
+        sample_path = join(
+            settings.MEDIA_ROOT, settings.TASKS_PATH, str(self.sample.id)
+        )
+        exists_before_delete = exists(sample_path)
+        self.assertTrue(exists_before_delete)
+
         self.sample.delete()
-        mock_rmtree.assert_called_once_with(self.sample_path)
+        exists_after_delete = exists(sample_path)
+        self.assertFalse(exists_after_delete)
