@@ -83,6 +83,7 @@ services:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
       - ./nginx/cert/:/etc/ssl/certs/
       - ./nginx/logs/:/var/log/nginx/
+      - ./accs_app/staticfiles/images/favicon.png:/ACCS/accs_app/staticfiles/images/favicon.png
       - static_volume:/ACCS/accs_app/staticfiles/
       - media_volume:/ACCS/accs_app/mediafiles/
     networks:

@@ -16,8 +16,7 @@ cert/
 # Logs
 *.log
 
-# Staticfiles
-staticfiles/
+# Mediafiles
 mediafiles/
 
 # nohup
