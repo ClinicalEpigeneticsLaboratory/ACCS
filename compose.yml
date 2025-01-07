@@ -6,7 +6,7 @@ services:
       args:
         UID: 1001
         GID: 1001
-    restart: always
+    restart: on-failure
     networks:
       - app_network
     volumes:
@@ -23,6 +23,7 @@ services:
 
   celery_worker:
     image: janbinkowski96/accs-celery-worker
+    restart: on-failure
     build:
       context: .
       dockerfile: images/celery_worker/Dockerfile
@@ -83,7 +84,6 @@ services:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
       - ./nginx/cert/:/etc/ssl/certs/
       - ./nginx/logs/:/var/log/nginx/
-      - ./accs_app/staticfiles/images/favicon.png:/ACCS/accs_app/staticfiles/images/favicon.png
       - static_volume:/ACCS/accs_app/staticfiles/
       - media_volume:/ACCS/accs_app/mediafiles/
     networks:
