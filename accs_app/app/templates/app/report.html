@@ -54,7 +54,7 @@
 
             {% else %}
 
-            <p><p>Anomaly score:</b> {{ report.task.result | get_item:'Anomaly_score' | floatformat:2 }} {% bs_icon 'circle-fill' color='red' %}</p>
+            <p><b>Anomaly score:</b> {{ report.task.result | get_item:'Anomaly_score' | floatformat:2 }} {% bs_icon 'circle-fill' color='red' %}</b>
 
             {% endif %}
 
