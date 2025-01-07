@@ -30,13 +30,20 @@
     <div class="row justify-content-center" style="padding-right: 2%; padding-left: 2%" id="sample-{{ sample.id }}">
         <div class="col-md-6 card border-0 rounded-lg mt-0 mb-3 record">
             <div class="row">
-                <div class="col-md">
+                <div class="col-md-10">
                     <h1>{{ sample.sample_name }}</h1>
                     <div class="row"><small>Creation date: {{ sample.creation_date }}</small></div>
                     <div class="row"><small>Task id: {{ sample.task.task_id }}</small></div>
-                    <hr>
+                </div>
+                <div class="col-md-2">
+                    {% if sample.public %}
+                    <div><span class="badge bg-success">Public</span></div>
+                    {% else %}
+                    <div><span class="badge bg-secondary">Private</span></div>
+                    {% endif %}
                 </div>
             </div>
+            <hr>
             <div class="row">
                 <div class="col-md-5">
                     <p id="prediction-{{ sample.task.id }}"></p>

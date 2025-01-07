@@ -28,6 +28,10 @@ class Sample(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
+    public = models.BooleanField(
+        default=False,
+        help_text=f"If public, the sample will be accessible to any registered user with the proper link.",
+    )
     task = models.OneToOneField(
         TaskResult, null=True, blank=True, on_delete=models.CASCADE
     )

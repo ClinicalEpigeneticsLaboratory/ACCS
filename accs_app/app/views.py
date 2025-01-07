@@ -3,9 +3,9 @@ import json
 from os.path import join
 
 from django.db.models import Q
+from django.http import Http404
 from django.conf import settings
 from django.shortcuts import render
-from django.contrib import messages
 from django.urls import reverse_lazy
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
@@ -108,7 +108,21 @@ class SampleReport(LoginRequiredMixin, DetailView):
     context_object_name = "report"
 
     def get_queryset(self):
-        return Sample.objects.filter(user=self.request.user)
+        if self.request.user.is_authenticated:
+            return Sample.objects.filter(Q(user=self.request.user) | Q(public=True))
+        else:
+            return Sample.objects.filter(public=True)
+
+    def dispatch(self, request, *args, **kwargs):
+        sample = self.get_object()
+
+        if sample.public or request.user.is_authenticated:
+            return super().dispatch(request, *args, **kwargs)
+        else:
+            raise Http404(
+                "You do not have permission to view this report. "
+                "Make sure that link is valid and sample is publicly available."
+            )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -221,7 +235,7 @@ class SampleDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
 class SampleUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Sample
     template_name = "app/update.html"
-    fields = ["sample_name", "diagnosis", "age", "sex"]
+    fields = ["sample_name", "diagnosis", "age", "sex", "public"]
     success_message = ""
 
     def get_queryset(self):

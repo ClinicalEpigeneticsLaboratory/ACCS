@@ -6,71 +6,75 @@
 <div class="row" style="padding: 15px">
     <div class="col-12">
         <h5>Sample name: {{ report.sample_name }}</h5>
-        <div><small>Creation date: {{ report.creation_date }}</small></div>
-        <div><small>Task id: {{ report.task.task_id }}</small></div>
-        <div><small>Provided diagnosis: {{ report.diagnosis }}</small></div>
-        <div><small>Model: {{ report.model.name }}</small></div>
-        <div><small>Platform: {{ Predicted_platform }}</small></div>
+        <hr>
+        <div><p><b>Owner:</b> {{ report.user.username }}</p></div>
+        <div><p><b>Task id:</b> {{ report.task.task_id }}</p></div>
+        <div><p><b>Creation date:</b> {{ report.creation_date }}</p></div>
+        <div><p><b>Public:</b> {{ report.public }}</p></div>
+        <hr>
+        <div><p><b>Provided diagnosis:</b> {{ report.diagnosis }}</p></div>
+        <div><p><b>Model:</b> {{ report.model.name }}</p></div>
+        <div><p><b>Platform:</b> {{ Predicted_platform }}</p></div>
         <hr>
     </div>
     <div class="row">
         <div class="col-md-4 col-sm-12">
-            <p>Prediction: {{ report.task.result | get_item:"Prediction" }}</p>
+            <p><b>Prediction:</b> {{ report.task.result | get_item:"Prediction" }}</p>
 
             {% if report.task.result|get_item:"Confidence_status" == 'High' %}
 
-            <p>Confidence: {{ report.task.result | get_item:"Confidence" | floatformat:2 }} {% bs_icon 'circle-fill' color='green' %}</p>
+            <p><b>Confidence:</b> {{ report.task.result | get_item:"Confidence" | floatformat:2 }} {% bs_icon 'circle-fill' color='green' %}</p>
 
             {% elif report.task.result|get_item:"Confidence_status" == 'Medium' %}
 
-            <p>Confidence: {{ report.task.result | get_item:"Confidence" | floatformat:2 }} {% bs_icon 'circle-fill' color='yellow' %}</p>
+            <p><b>Confidence:</b> {{ report.task.result | get_item:"Confidence" | floatformat:2 }} {% bs_icon 'circle-fill' color='yellow' %}</p>
 
             {% elif report.task.result|get_item:"Confidence_status" == 'Low' %}
 
-            <p>Confidence: {{ report.task.result | get_item:"Confidence" | floatformat:2 }} {% bs_icon 'circle-fill' color='orange' %}</p>
+            <p><b>Confidence:</b> {{ report.task.result | get_item:"Confidence" | floatformat:2 }} {% bs_icon 'circle-fill' color='orange' %}</p>
 
             {% else %}
 
-            <p>Confidence: {{ report.task.result | get_item:"Confidence" | floatformat:2 }} {% bs_icon 'circle-fill' color='red' %}</p>
+            <p><b></b>Confidence:</b> {{ report.task.result | get_item:"Confidence" | floatformat:2 }} {% bs_icon 'circle-fill' color='red' %}</p>
 
             {% endif %}
 
         </div>
         <div class="col-md-4 col-sm-12">
 
-            <p>Anomaly: {{ report.task.result | get_item:"Anomaly_status" }}</p>
+            <p><b>Anomaly:</b> {{ report.task.result | get_item:"Anomaly_status" }}</p>
 
             {% if report.task.result|get_item:'Anomaly_status' == 'Low-risk sample' %}
 
-            <p>Anomaly score: {{ report.task.result | get_item:'Anomaly_score' | floatformat:2 }} {% bs_icon 'circle-fill' color='green' %}</p>
+            <p><b>Anomaly score:</b> {{ report.task.result | get_item:'Anomaly_score' | floatformat:2 }} {% bs_icon 'circle-fill' color='green' %}</p>
 
             {% elif report.task.result|get_item:'Anomaly_status' == 'Medium-risk sample' %}
 
-            <p>Anomaly score: {{ report.task.result | get_item:'Anomaly_score' | floatformat:2 }} {% bs_icon 'circle-fill' color='orange' %}</p>
+            <p><b>Anomaly score:</b> {{ report.task.result | get_item:'Anomaly_score' | floatformat:2 }} {% bs_icon 'circle-fill' color='orange' %}</p>
 
             {% else %}
 
-            <p>Anomaly score: {{ report.task.result | get_item:'Anomaly_score' | floatformat:2 }} {% bs_icon 'circle-fill' color='red' %}</p>
+            <p><p>Anomaly score:</b> {{ report.task.result | get_item:'Anomaly_score' | floatformat:2 }} {% bs_icon 'circle-fill' color='red' %}</p>
 
             {% endif %}
 
         </div>
         <div class="col-md-4 col-sm-12">
-            <p>Age: {{ report.age }}</p>
+            <p><b>Age:</b> {{ report.age }}</p>
             {% if report.sex %}
             {% if report.sex == Predicted_sex %}
 
-            <p>Sex declared: {{ report.sex }} vs predicted: {{ Predicted_sex }} {% bs_icon 'circle-fill' color='green' %} </p>
+            <p><b>Sex declared:</b> {{ report.sex }} vs predicted: {{ Predicted_sex }} {% bs_icon 'circle-fill' color='green' %} </p>
 
             {% else %}
 
-            <p>Sex declared: {{ report.sex }} vs predicted: {{ Predicted_sex }} {% bs_icon 'circle-fill' color='red' %} </p>
+            <p><b>Sex declared:</b> {{ report.sex }} vs <b>predicted:</b> {{ Predicted_sex }} {% bs_icon 'circle-fill' color='red' %} </p>
 
             {% endif %}
 
             {% else%}
 
-            <p>Sex predicted: {{ Predicted_sex }}</p>
+            <p><b>Sex predicted:</b> {{ Predicted_sex }}</p>
 
             {% endif %}
         </div>
