@@ -30,7 +30,7 @@ class Sample(models.Model):
     user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
     public = models.BooleanField(
         default=False,
-        help_text=f"If public, the sample will be accessible to any registered user with the proper link.",
+        help_text=f"If made public, the report will be accessible to anyone with the appropriate link.",
     )
     task = models.OneToOneField(
         TaskResult, null=True, blank=True, on_delete=models.CASCADE
