@@ -101,10 +101,9 @@ class SamplesList(LoginRequiredMixin, ListView):
         return samples
 
 
-class SampleReport(LoginRequiredMixin, DetailView):
+class SampleReport(DetailView):
     model = Sample
     template_name = "app/report.html"
-    redirect_field_name = "accs-login"
     context_object_name = "report"
 
     def get_queryset(self):
@@ -119,10 +118,7 @@ class SampleReport(LoginRequiredMixin, DetailView):
         if sample.public or request.user.is_authenticated:
             return super().dispatch(request, *args, **kwargs)
         else:
-            raise Http404(
-                "You do not have permission to view this report. "
-                "Make sure that link is valid and sample is publicly available."
-            )
+            raise Http404()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

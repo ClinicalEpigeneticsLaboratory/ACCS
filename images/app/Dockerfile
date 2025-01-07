@@ -23,15 +23,20 @@ RUN echo python -m poetry --verion
 RUN python -m poetry export --without-hashes --format=requirements.txt -o requirements.txt
 RUN python -m pip install -r requirements.txt
 
-# Expose the port that the application listens on
-EXPOSE 8000
-
 # Modify owners
 RUN chown appuser:appuser -R /ACCS/accs_app
 RUN chmod -R 755 /ACCS/accs_app
 
+# Add static and media directories
+RUN mkdir -p /opt/mediafiles /var/www/staticfiles
+RUN chown appuser:appuser -R /opt/mediafiles /var/www/staticfiles
+RUN chmod -R 755 /opt/mediafiles /var/www/staticfiles
+
 # Switch workdir
 WORKDIR /ACCS/accs_app/
+
+# Expose the port that the application listens on
+EXPOSE 8000
 
 # Switch to the non-privileged user to run the application
 USER appuser
