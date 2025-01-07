@@ -34,8 +34,8 @@ WORKDIR /ACCS/
 
 # Install Python dependencies
 COPY poetry.lock pyproject.toml ./
-RUN python3.10 -m pip install poetry
-RUN python3.10 -m poetry export --without-hashes --format=requirements.txt > requirements.txt
+RUN python3.10 -m pip install poetry poetry-plugin-export
+RUN python3.10 -m poetry export --without-hashes --format=requirements.txt -o requirements.txt
 RUN python3.10 -m pip install -r requirements.txt
 
 # Prepare dir for sesame cache

@@ -18,8 +18,9 @@ WORKDIR /ACCS/
 COPY . .
 
 # Install dependencies
-RUN python -m pip install --no-cache-dir poetry
-RUN python -m poetry export --without-hashes --format=requirements.txt > requirements.txt
+RUN python -m pip install --no-cache-dir poetry poetry-plugin-export
+RUN echo python -m poetry --verion
+RUN python -m poetry export --without-hashes --format=requirements.txt -o requirements.txt
 RUN python -m pip install -r requirements.txt
 
 # Expose the port that the application listens on
