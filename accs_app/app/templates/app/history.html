@@ -50,34 +50,30 @@
                     <p id="confidence-{{ sample.task.id }}"></p>
                     <p id="anomaly-{{ sample.task.id }}"></p>
                 </div>
-                <div class="col-md-3">
-                    <p>
-                        <a href="{% url 'accs-delete' sample.id %}">
-                            <button class="btn btn-outline-danger record-btn" style="min-width: 155px; margin: 3px">
-                                Delete task
-                            </button>
-                        </a>
-                        <a href="{% url 'accs-update' sample.id %}">
-                            <button class="btn btn-outline-info record-btn" style="min-width: 155px; margin: 3px">
-                                Update task
-                            </button>
-                        </a>
-                    </p>
-                </div>
-                <div class="col-md-3">
-                    <p>
-                        <button id="status-{{ sample.task.id }}" class="btn btn-outline-warning record-btn"
-                                style="min-width: 155px; margin: 3px; cursor: default;" disabled>
-                                Status: PENDING
-                        </button>
-                        <a href="{% url 'accs-report' sample.id %}" id="report-link-{{ sample.task.id }}" style="pointer-events: none; text-decoration: none; color: inherit;">
-                            <button id="report-{{ sample.task.id }}" class="btn btn-outline-info record-btn"
-                                    style="min-width: 155px; margin: 3px" disabled>
-                                See report
-                            </button>
-                        </a>
-                    </p>
-                </div>
+                    <div class="row">
+                        <div class="col-md-3 d-flex flex-column">
+                            <p>
+                                <a href="{% url 'accs-delete' sample.id %}">
+                                    <button class="btn btn-outline-danger record-btn">Delete task</button>
+                                </a>
+                                <a href="{% url 'accs-update' sample.id %}">
+                                    <button class="btn btn-outline-info record-btn">Update task</button>
+                                </a>
+                            </p>
+                        </div>
+                        <div class="col-md-3 d-flex flex-column">
+                            <p>
+                                <button id="status-{{ sample.task.id }}" class="btn btn-outline-warning record-btn" disabled>
+                                    Status: PENDING
+                                </button>
+                                <a href="{% url 'accs-report' sample.id %}" id="report-link-{{ sample.task.id }}" style="pointer-events: none;">
+                                    <button id="report-{{ sample.task.id }}" class="btn btn-outline-info record-btn" disabled>
+                                        See report
+                                    </button>
+                                </a>
+                            </p>
+                        </div>
+                    </div>
             </div>
         </div>
     </div>
