@@ -3,44 +3,33 @@
 
 {% block content %}
 <div class="container">
-    <div class="row justify-content-center" style="padding: 10px">
+    <div class="row justify-content-center py-3">
         <div class="col-md-7">
             <form class="input-group" action="{% url 'accs-history' %}" method="get">
-                <!-- Search input field -->
-                <input name="q" type="search" class="form-control rounded" id="search-box" placeholder="Search ..." aria-label="Search" aria-describedby="search-addon" />
-                <button type="submit" class="btn btn-outline-primary" data-mdb-ripple-init>Search</button>
-
-                <!-- Reset button that clears query -->
-                <a href="{% url 'accs-history' %}">
-                    <button type="button" class="btn btn-outline-danger" id="reset-btn">
-                        Reset
-                    </button>
-                </a>
+                <input name="q" type="search" class="form-control rounded" id="search-box" placeholder="Search ..." aria-label="Search" />
+                <button type="submit" class="btn btn-outline-primary">Search</button>
+                <button type="button" class="btn btn-outline-danger" id="reset-btn">Reset</button>
             </form>
-            <small style="color: grey">Search for sample name(s) or provided diagnosis.</small>
+            <small class="text-muted">Search for sample name(s) or provided diagnosis.</small>
         </div>
     </div>
 </div>
 
 {% if samples %}
 <div class="container">
-
     {% for sample in samples %}
-
-    <div class="row justify-content-center" style="padding-right: 2%; padding-left: 2%" id="sample-{{ sample.id }}">
-        <div class="col-md-6 card border-0 rounded-lg mt-0 mb-3 record">
-            <div class="row">
+    <div class="row justify-content-center px-2" id="sample-{{ sample.id }}">
+        <div class="col-md-6 card border-0 rounded-lg my-3 p-3">
+            <div class="row align-items-center">
                 <div class="col-md-10">
                     <h1>{{ sample.sample_name }}</h1>
-                    <div class="row"><small>Creation date: {{ sample.creation_date }}</small></div>
-                    <div class="row"><small>Task id: {{ sample.task.task_id }}</small></div>
+                    <small>Creation date: {{ sample.creation_date }}</small><br>
+                    <small>Task id: {{ sample.task.task_id }}</small>
                 </div>
-                <div class="col-md-2">
-                    {% if sample.public %}
-                    <div><span class="badge bg-success">Public</span></div>
-                    {% else %}
-                    <div><span class="badge bg-secondary">Private</span></div>
-                    {% endif %}
+                <div class="col-md-2 text-end">
+                    <span class="badge {% if sample.public %}bg-success{% else %}bg-secondary{% endif %}">
+                        {{ sample.public|yesno:"Public,Private" }}
+                    </span>
                 </div>
             </div>
             <hr>
@@ -50,119 +39,83 @@
                     <p id="confidence-{{ sample.task.id }}"></p>
                     <p id="anomaly-{{ sample.task.id }}"></p>
                 </div>
-                <div class="col-md-3 d-flex flex-column column-gap: normal">
-                    <a href="{% url 'accs-delete' sample.id %}">
-                        <button class="btn btn-outline-danger record-btn" style="min-width: 155px; margin: 3px">
-                            Delete task
-                        </button>
-                    </a>
-                    <a href="{% url 'accs-update' sample.id %}">
-                        <button class="btn btn-outline-info record-btn" style="min-width: 155px; margin: 3px">
-                            Update task
-                        </button>
-                    </a>
-                </div>
-                <div class="col-md-3 d-flex flex-column column-gap: normal">
-                    <a>
-                        <button id="status-{{ sample.task.id }}" class="btn btn-outline-warning record-btn"
-                                style="min-width: 155px; margin: 3px; cursor: default;" disabled>
-                                Status: PENDING
-                        </button>
-                    </a>
-                    <a href="{% url 'accs-report' sample.id %}" id="report-link-{{ sample.task.id }}" style="pointer-events: none; text-decoration: none; color: inherit;">
-                            <button id="report-{{ sample.task.id }}" class="btn btn-outline-info record-btn"
-                                    style="min-width: 155px; margin: 3px" disabled>
-                                See report
-                            </button>
+                <div class="col-md-7 d-flex flex-wrap gap-2">
+                    <a href="{% url 'accs-delete' sample.id %}" class="btn btn-outline-danger record-btn">Delete task</a>
+                    <a href="{% url 'accs-update' sample.id %}" class="btn btn-outline-info record-btn">Update task</a>
+                    <button id="status-{{ sample.task.id }}" class="btn btn-outline-warning record-btn" disabled>Status: PENDING</button>
+                    <a href="{% url 'accs-report' sample.id %}" id="report-link-{{ sample.task.id }}" class="btn btn-outline-info record-btn disabled-link" aria-disabled="true">
+                        See report
                     </a>
                 </div>
             </div>
         </div>
     </div>
-
     {% endfor %}
 
-    <div class="row justify-content-center" style="margin-bottom: 50px;">
+    <div class="row justify-content-center mb-5">
         <div class="col-lg-6">
             <nav aria-label="Page navigation">
                 <ul class="pagination justify-content-end">
                     {% if page_obj.has_previous %}
                     <li class="page-item"><a class="page-link" href="?page=1">First</a></li>
-                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}"
-                                             tabindex="-1">Previous</a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
                     {% endif %}
-                    <li class="page-item">
-                        <span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
-                    </li>
+                    <li class="page-item"><span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span></li>
                     {% if page_obj.has_next %}
-                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}"
-                                             tabindex="-1">Last</a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a></li>
                     {% endif %}
                 </ul>
             </nav>
         </div>
     </div>
 </div>
-
 {% else %}
-
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-lg-7">
-        <p>No data to display: <a href="{% url 'accs-submit' %}">Submit new sample</a></p>
+        <div class="col-lg-7 text-center">
+            <p>No data to display: <a href="{% url 'accs-submit' %}">Submit new sample</a></p>
         </div>
     </div>
 </div>
-
 {% endif %}
 
 <script>
-    // Function to fetch and update task status
     async function updateTaskStatus() {
         try {
-            // Fetch the data from the server
             const response = await fetch('/tasks-status/');
-
-            // Parse the response as JSON, which is a list of JSON objects
             const data = await response.json();
 
-            // Iterate through the array of JSON objects and update each element
             data.forEach((element) => {
                 const taskID = element.task_id;
-                const task_status = element.task_status;
-
-                // Get references to the status and report buttons
                 const statusButton = document.getElementById(`status-${taskID}`);
                 const reportButton = document.getElementById(`report-${taskID}`);
                 const reportLink = document.getElementById(`report-link-${taskID}`);
-
                 const predictionField = document.getElementById(`prediction-${taskID}`);
                 const confidenceField = document.getElementById(`confidence-${taskID}`);
                 const anomalyField = document.getElementById(`anomaly-${taskID}`);
 
-                // Update button styles and status text
-                if ((statusButton) && (task_status === "SUCCESS")) {
-                    statusButton.setAttribute('class', 'btn btn-outline-success record-btn');
-                    statusButton.innerText = `Status: ${task_status}`;
+                if (statusButton && element.task_status === "SUCCESS") {
+                    statusButton.className = 'btn btn-outline-success record-btn';
+                    statusButton.innerText = `Status: ${element.task_status}`;
                     reportButton.disabled = false;
 
-                    reportLink.style.pointerEvents = 'auto';
-
+                    reportLink.classList.remove('disabled-link');
+                    reportLink.removeAttribute('aria-disabled');
                     predictionField.innerText = `Prediction: ${element.prediction}`;
+
                     confidenceField.innerText = `Confidence: ${element.confidence}`;
                     anomalyField.innerText = `Anomaly: ${element.anomaly}`;
 
-                }
-                if ((statusButton) && (task_status !== "SUCCESS")) {
-                    statusButton.setAttribute('class', 'btn btn-outline-waring record-btn');
-                    statusButton.innerText = `Status: ${task_status}`;
+                } else {
+                    statusButton.className = 'btn btn-outline-warning record-btn';
+                    statusButton.innerText = `Status: ${element.task_status}`;
                     reportButton.disabled = true;
 
-                    reportLink.style.pointerEvents = 'none';
-                    
+                    reportLink.classList.add('disabled-link');
+                    reportLink.setAttribute('aria-disabled', 'true');
                     predictionField.innerText = `Prediction: -`;
+
                     confidenceField.innerText = `Confidence: -`;
                     anomalyField.innerText = `Anomaly: -`;
                 }
@@ -171,39 +124,23 @@
             console.error("Error fetching task statuses:", error);
         }
     }
-
-    // Initial call to update task status and set interval for periodic updates
     updateTaskStatus();
     setInterval(updateTaskStatus, 5000);
-</script>
 
-<script>
-    // Check if there's a 'q' parameter in the URL and update the search box
     window.onload = function() {
         const urlParams = new URLSearchParams(window.location.search);
         const query = urlParams.get('q');
-
         if (query) {
-            // Update the search box with the 'q' value from the URL
             document.getElementById('search-box').value = query;
         }
     }
 
-    // Ensure reset button works and clears the search query in the URL
     document.getElementById('reset-btn').addEventListener('click', function(e) {
-        // Prevent the link from navigating immediately
         e.preventDefault();
-
-        // Clear the search box value
         document.getElementById('search-box').value = '';
-
-        // Redirect to the URL without the 'q' parameter (resetting the search)
         const url = new URL(window.location);
         url.searchParams.delete('q');
-
-        // Remove the 'q' parameter
-        window.location.href = url.toString(); // Reload the page without the query
+        window.location.href = url.toString();
     });
 </script>
-
 {% endblock content %}
