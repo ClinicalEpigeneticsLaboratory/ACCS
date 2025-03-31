@@ -50,6 +50,7 @@ p {
 }
 .record-btn {
   min-width: 140px;
+  margin: 5px;
 }
 .nav-justified-left {
   display: flex;
