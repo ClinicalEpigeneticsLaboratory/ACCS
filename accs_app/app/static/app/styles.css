@@ -20,8 +20,9 @@ p {
 .main {
   min-height: 95%;
 }
-.btn  {
-  min-width: 75px;
+.uniform-btn {
+    width: 135px; /* Adjust as needed */
+    min-width: 135px;
 }
 .link{
   color: #777779;
@@ -43,14 +44,17 @@ p {
   padding: 10px;
   margin: 15px;
   transition: box-shadow 0.3s ease;
-  box-shadow: 0px 4px 12px rgba(211, 211, 211, 0.8); /* Light gray shadow by default */
+  box-shadow: 0px 4px 12px rgba(211, 211, 211, 0.8);
 }
 .record:hover {
-    box-shadow: 0px 4px 12px rgba(91, 91, 220, 0.5); /* Adjust the color and opacity */
+    box-shadow: 0px 4px 12px rgb(11, 37, 72);
 }
 .record-btn {
   min-width: 140px;
   margin: 5px;
+}
+.section:hover {
+  box-shadow: 0px 4px 12px rgb(11, 37, 72);
 }
 .nav-justified-left {
   display: flex;
@@ -71,7 +75,7 @@ p {
   margin: 10px;
 }
 .footer-divider {
-    border-color: rgba(252, 41, 41, 0.5); /* Light border color for visibility */
+    border-color: white;
     border-width: 5px;
     margin: 10px 0;
 }
