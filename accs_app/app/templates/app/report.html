@@ -3,123 +3,118 @@
 {% load filters %}
 
 {% block content %}
-<div class="row" style="padding: 15px">
-    <div class="col-12">
-        <h5>Sample name: {{ report.sample_name }}</h5>
-        <hr>
-        <div><p><b>Owner:</b> {{ report.user.username }}</p></div>
-        <div><p><b>Task id:</b> {{ report.task.task_id }}</p></div>
-        <div><p><b>Creation date:</b> {{ report.creation_date }}</p></div>
-        <div><p><b>Public:</b> {{ report.public }}</p></div>
-        <hr>
-        <div><p><b>Provided diagnosis:</b> {{ report.diagnosis }}</p></div>
-        <div><p><b>Model:</b> {{ report.model.name }}</p></div>
-        <div><p><b>Platform:</b> {{ Predicted_platform }}</p></div>
-        <hr>
+<div class="row" style="padding: 2%">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h4 class="mb-3"><strong>Sample name: </strong> {{ report.sample_name }}</h4>
+            <ul class="list-unstyled">
+                <li><strong>Owner:</strong> {{ report.user.username }}</li>
+                <li><strong>Task ID:</strong> {{ report.task.task_id }}</li>
+                <li><strong>Creation date:</strong> {{ report.creation_date }}</li>
+                <li><strong>Public:</strong> {{ report.public }}</li>
+            </ul>
+            <hr>
+            <ul class="list-unstyled">
+                <li><strong>Input Grn IDAT file:</strong> {{ report.grn_idat | filename }}</li>
+                <li><strong>Input Red IDAT file:</strong> {{ report.red_idat | filename }}</li>
+            </ul>
+            <hr>
+            <ul class="list-unstyled">
+                <li><strong>Provided diagnosis:</strong> {{ report.diagnosis }}</li>
+                <li><strong>Model:</strong> {{ report.model.name }}</li>
+                <li><strong>Platform:</strong> {{ Predicted_platform }}</li>
+            </ul>
+            <hr>
+        </div>
     </div>
-    <div class="row">
-        <div class="col-md-4 col-sm-12">
-            <p><b>Prediction:</b> {{ report.task.result | get_item:"Prediction" }}</p>
 
-            {% if report.task.result|get_item:"Confidence_status" == 'High' %}
-
-            <p><b>Confidence:</b> {{ report.task.result | get_item:"Confidence" | floatformat:2 }} {% bs_icon 'circle-fill' color='green' %}</p>
-
-            {% elif report.task.result|get_item:"Confidence_status" == 'Medium' %}
-
-            <p><b>Confidence:</b> {{ report.task.result | get_item:"Confidence" | floatformat:2 }} {% bs_icon 'circle-fill' color='yellow' %}</p>
-
-            {% elif report.task.result|get_item:"Confidence_status" == 'Low' %}
-
-            <p><b>Confidence:</b> {{ report.task.result | get_item:"Confidence" | floatformat:2 }} {% bs_icon 'circle-fill' color='orange' %}</p>
-
-            {% else %}
-
-            <p><b></b>Confidence:</b> {{ report.task.result | get_item:"Confidence" | floatformat:2 }} {% bs_icon 'circle-fill' color='red' %}</p>
-
-            {% endif %}
-
+    <div class="row mb-4">
+        <div class="col-md-4 col-sm-12 mb-3">
+            <h6>Prediction</h6>
+            <p><strong>Prediction:</strong> {{ report.task.result | get_item:"Prediction" }}</p>
+            <p>
+                <strong>Confidence:</strong> {{ report.task.result | get_item:"Confidence" | floatformat:2 }}
+                {% with status=report.task.result|get_item:"Confidence_status" %}
+                    {% if status == "High" %}
+                        {% bs_icon 'circle-fill' color='green' %}
+                    {% elif status == "Medium" %}
+                        {% bs_icon 'circle-fill' color='yellow' %}
+                    {% elif status == "Low" %}
+                        {% bs_icon 'circle-fill' color='orange' %}
+                    {% else %}
+                        {% bs_icon 'circle-fill' color='red' %}
+                    {% endif %}
+                {% endwith %}
+            </p>
         </div>
-        <div class="col-md-4 col-sm-12">
 
-            <p><b>Anomaly:</b> {{ report.task.result | get_item:"Anomaly_status" }}</p>
-
-            {% if report.task.result|get_item:'Anomaly_status' == 'Low-risk sample' %}
-
-            <p><b>Anomaly score:</b> {{ report.task.result | get_item:'Anomaly_score' | floatformat:2 }} {% bs_icon 'circle-fill' color='green' %}</p>
-
-            {% elif report.task.result|get_item:'Anomaly_status' == 'Medium-risk sample' %}
-
-            <p><b>Anomaly score:</b> {{ report.task.result | get_item:'Anomaly_score' | floatformat:2 }} {% bs_icon 'circle-fill' color='orange' %}</p>
-
-            {% else %}
-
-            <p><b>Anomaly score:</b> {{ report.task.result | get_item:'Anomaly_score' | floatformat:2 }} {% bs_icon 'circle-fill' color='red' %}</b>
-
-            {% endif %}
-
+        <div class="col-md-4 col-sm-12 mb-3">
+            <h6>Anomaly Detection</h6>
+            <p><strong>Anomaly:</strong> {{ report.task.result | get_item:"Anomaly_status" }}</p>
+            <p>
+                <strong>Anomaly score:</strong> {{ report.task.result | get_item:'Anomaly_score' | floatformat:2 }}
+                {% with status=report.task.result|get_item:'Anomaly_status' %}
+                    {% if status == "Low-risk sample" %}
+                        {% bs_icon 'circle-fill' color='green' %}
+                    {% elif status == "Medium-risk sample" %}
+                        {% bs_icon 'circle-fill' color='orange' %}
+                    {% else %}
+                        {% bs_icon 'circle-fill' color='red' %}
+                    {% endif %}
+                {% endwith %}
+            </p>
         </div>
-        <div class="col-md-4 col-sm-12">
-            <p><b>Age:</b> {{ report.age }}</p>
+
+        <div class="col-md-4 col-sm-12 mb-3">
+            <h6>Donor Characteristics</h6>
+            <p><strong>Age:</strong> {{ report.age }}</p>
             {% if report.sex %}
-            {% if report.sex == Predicted_sex %}
-
-            <p><b>Sex declared:</b> {{ report.sex }} vs predicted: {{ Predicted_sex }} {% bs_icon 'circle-fill' color='green' %} </p>
-
+                {% if report.sex == Predicted_sex %}
+                    <p><strong>Sex declared:</strong> {{ report.sex }} vs predicted: {{ Predicted_sex }} {% bs_icon 'circle-fill' color='green' %}</p>
+                {% else %}
+                    <p><strong>Sex declared:</strong> {{ report.sex }} vs <strong>predicted:</strong> {{ Predicted_sex }} {% bs_icon 'circle-fill' color='red' %}</p>
+                {% endif %}
             {% else %}
-
-            <p><b>Sex declared:</b> {{ report.sex }} vs <b>predicted:</b> {{ Predicted_sex }} {% bs_icon 'circle-fill' color='red' %} </p>
-
-            {% endif %}
-
-            {% else%}
-
-            <p><b>Sex predicted:</b> {{ Predicted_sex }}</p>
-
+                <p><strong>Sex predicted:</strong> {{ Predicted_sex }}</p>
             {% endif %}
         </div>
     </div>
-</div>
 
-<div class="row">
-    <div id="spinner-row-one" class="d-flex justify-content-center" style="margin: 2%">
-        <div class="spinner-border text-info" style="width: 3rem; height: 3rem;" role="status">
-            <span class="sr-only"></span>
+    <div class="row text-center mb-4">
+        <div id="spinner-row-one" class="d-flex justify-content-center my-3">
+            <div class="spinner-border text-info" style="width: 3rem; height: 3rem;" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-sm-12 mb-3" id="plot-a" style="visibility: hidden">
+            {{ pp | safe }}
+        </div>
+
+        <div class="col-md-3 col-sm-12 mb-3" id="plot-b" style="visibility: hidden">
+            {{ nf | safe }}
+        </div>
+
+        <div class="col-md-3 col-sm-12 mb-3" id="plot-c" style="visibility: hidden">
+            {{ ap | safe }}
         </div>
     </div>
 
-    <div class="col-md-6 col-sm-12" id="plot-a" style="visibility: hidden">
-        {{ pp | safe }}
-    </div>
-
-    <div class="col-md-3 col-sm-12" id="plot-b" style="visibility: hidden">
-        {{ nf | safe }}
-    </div>
-
-    <div class="col-md-3 col-sm-12" id="plot-c" style="visibility: hidden">
-        {{ ap | safe }}
-    </div>
-</div>
-
-<hr>
-
-<div class="row">
-    <div id="spinner-row-two" class="d-flex justify-content-center" style="margin: 2%">
-        <div class="spinner-border text-info" style="width: 3rem; height: 3rem;" role="status">
-            <span class="sr-only"></span>
+    <div class="row text-center">
+        <div id="spinner-row-two" class="d-flex justify-content-center my-3">
+            <div class="spinner-border text-info" style="width: 3rem; height: 3rem;" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
         </div>
-    </div>
 
-    <div class="col-md-12" id="plot-d" style="visibility: hidden">
-        {{ cnvs | safe }}
+        <div class="col-md-12" id="plot-d" style="visibility: hidden">
+            {{ cnvs | safe }}
+        </div>
     </div>
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Spinner:', document.getElementById('spinner'));
-    console.log('Plots:', document.getElementById('plots'));
-
+document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('spinner-row-one').style.setProperty('display', 'none', 'important');
     document.getElementById('spinner-row-two').style.setProperty('display', 'none', 'important');
 
@@ -127,7 +122,6 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('plot-b').style.setProperty('visibility', 'visible', 'important');
     document.getElementById('plot-c').style.setProperty('visibility', 'visible', 'important');
     document.getElementById('plot-d').style.setProperty('visibility', 'visible', 'important');
-
 });
 </script>
 {% endblock content %}

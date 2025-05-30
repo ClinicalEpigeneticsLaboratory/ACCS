@@ -13,9 +13,9 @@
     <link href="{% static 'app/styles.css' %}" rel="stylesheet" type="text/css">
 
     {% if title %}
-    <title>MbCC v1 - {{ title }}</title>
+    <title>OPP v1 - {{ title }}</title>
     {% else %}
-    <title>MbCC v1</title>
+    <title>OPP v1</title>
     {% endif %}
 </head>
 
@@ -23,9 +23,9 @@
 
 <link rel="shortcut icon" type="image/png" href="{% static 'favicon.png' %}">
 
-<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light nav-section">
+<nav class="navbar sticky-top navbar-expand-lg navbar-light nav-section" style="background-color: white">
     <div class="container-fluid">
-        <a class="navbar-brand" href="{% url 'accs-home' %}">MbCC v1</a>
+        <a class="navbar-brand" href="{% url 'accs-home' %}">OPP v1</a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
                 aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -86,11 +86,11 @@
 <div class="row justify-content-center">
     <div class="col-12">
         {% if messages %}
-        {% for message in messages%}
-        <div class="alert alert-{{ message.tags }}">
-            {{ message }}
-        </div>
-        {% endfor %}
+            {% for message in messages%}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+            {% endfor %}
         {% endif %}
     </div>
 </div>
@@ -99,9 +99,9 @@
     {% block content %} {% endblock %}
 </div>
 
-<footer class="container-fluid text-center text-light footer-section">
+<footer class="container-fluid text-center text-light footer-section" style="background-color: white">
     <div style="margin: 10px">
-        <a href="{% url 'accs-home' %}"><button class="btn btn-outline-secondary" style="min-width: 80px">MbCC v1</button></a>
+        <a href="{% url 'accs-home' %}"><button class="btn btn-outline-secondary" style="min-width: 80px">OPP v1</button></a>
         <a href="mailto:jan.binkowski@pum.edu.pl"><button class="btn btn-outline-secondary" style="min-width: 80px">Contact</button></a>
     </div>
     <hr class="hr-footer">
