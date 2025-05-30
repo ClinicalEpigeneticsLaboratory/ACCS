@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 from django import template
 
 register = template.Library()
@@ -10,3 +11,8 @@ def get_item(dictionary, key):
         dictionary = json.loads(dictionary)
         return dictionary.get(key, "Unknown")
     return ""
+
+
+@register.filter
+def filename(value):
+    return Path(value.name).name
