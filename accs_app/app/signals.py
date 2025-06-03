@@ -18,7 +18,7 @@ def delete_sample(sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=Sample)
-def pull_model_repo(sender, instance, created, **kwargs):
+def sample_added_to_queue(sender, instance, created, **kwargs):
     token = settings.SLACK_TOKEN
 
     if created and token:

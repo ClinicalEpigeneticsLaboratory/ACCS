@@ -34,7 +34,7 @@ def validate_github_repo(value):
             raise ValidationError("The provided GitHub URL is invalid.")
 
         # Assuming the repository's default branch is 'main'
-        file_url = f"https://raw.githubusercontent.com/{'/'.join(repo_url_parts[3:])}/main/workflow.nf"
+        file_url = f"https://raw.githubusercontent.com/{'/'.join(repo_url_parts[3:])}/blob/main/workflow.nf"
 
         response = requests.head(file_url, timeout=5)
         if response.status_code != 200:

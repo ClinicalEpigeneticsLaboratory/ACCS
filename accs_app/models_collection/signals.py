@@ -32,7 +32,6 @@ def pull_model_repo(sender, instance, created, **kwargs):
                 subprocess.run(["chmod", "+x", file], check=True, shell=False)
 
         model_metadata = join(model_destination_path, "metadata.json")
-
         if exists(model_metadata):
             with open(model_metadata, "r") as file:
                 model_metadata = json.load(file)
