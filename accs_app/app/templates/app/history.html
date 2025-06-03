@@ -27,7 +27,7 @@
                         <div class="col-12 col-md-10 mb-3">
                             <h1>{{ sample.sample_name }}</h1>
                             <div><small>Creation date: {{ sample.creation_date }}</small></div>
-                            <div><small>Task id: {{ sample.task.task_id | :"Waiting ..."}}</small></div>
+                            <div><small>Task id: {{ sample.task.task_id }}</small></div>
                         </div>
                         <div class="col-12 col-md-2 mb-3 text-md-end">
                             {% if sample.public %}
@@ -138,7 +138,7 @@
     }
 
     updateTaskStatus();
-    setInterval(updateTaskStatus, 2500);
+    setInterval(updateTaskStatus, 5000);
 </script>
 
 <script>
