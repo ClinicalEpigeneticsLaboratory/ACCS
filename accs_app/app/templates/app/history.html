@@ -23,13 +23,14 @@
         <div class="row justify-content-center mb-4" id="sample-{{ sample.id }}">
             <div class="col-12 col-md-10 col-lg-7">
                 <div class="card card_dynamic section border-1 rounded-lg p-3">
-                    <div class="row align-items-start">
-                        <div class="col-12 col-md-10 mb-3">
+                    <div class="row align-items-start justify-content-between">
+                        <div class="col-9">
                             <h1>{{ sample.sample_name }}</h1>
                             <div><small>Creation date: {{ sample.creation_date }}</small></div>
                             <div><small>Task id: {{ sample.task.task_id }}</small></div>
+                            <div><small>Model name: {{ sample.model.name }}</small></div>
                         </div>
-                        <div class="col-12 col-md-2 mb-3 text-md-end">
+                        <div class="col-1" style="margin-right: 50px">
                             {% if sample.public %}
                                 <span class="badge bg-success">Public</span>
                             {% else %}
@@ -44,7 +45,7 @@
                             <p id="confidence-{{ sample.task.id }}"></p>
                             <p id="anomaly-{{ sample.task.id }}"></p>
                         </div>
-                        <div class="col-12 col-md-4 mb-3 d-flex flex-column">
+                        <div class="col-12 col-md-4 d-flex flex-column">
                             <a href="{% url 'accs-delete' sample.id %}">
                                 <button class="btn btn-outline-danger w-100 mb-2">Delete task</button>
                             </a>
@@ -52,7 +53,7 @@
                                 <button class="btn btn-outline-info w-100 mb-2">Update task</button>
                             </a>
                         </div>
-                        <div class="col-12 col-md-4 mb-3 d-flex flex-column">
+                        <div class="col-12 col-md-4 d-flex flex-column">
                             <button id="status-{{ sample.task.id }}" class="btn btn-outline-warning w-100 mb-2" style="cursor: default;" disabled>Status: PENDING</button>
                             <a href="{% url 'accs-report' sample.id %}" id="report-link-{{ sample.task.id }}" style="pointer-events: none; text-decoration: none; color: inherit">
                                 <button id="report-{{ sample.task.id }}" class="btn btn-outline-danger w-100 mb-2" disabled>See report</button>
