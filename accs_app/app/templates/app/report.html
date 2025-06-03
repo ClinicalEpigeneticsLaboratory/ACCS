@@ -3,7 +3,7 @@
 {% load filters %}
 
 {% block content %}
-<div class="row" style="padding: 2%">
+<div class="row" style="padding: 1%">
     <div class="row mb-4">
         <div class="col-12">
             <h4 class="mb-3"><strong>Sample name: </strong> {{ report.sample_name }}</h4>
@@ -30,7 +30,7 @@
 
     <div class="row mb-4">
         <div class="col-md-4 col-sm-12 mb-3">
-            <h6>Prediction</h6>
+            <h5>Prediction</h5>
             <p><strong>Prediction:</strong> {{ report.task.result | get_item:"Prediction" }}</p>
             <p>
                 <strong>Confidence:</strong> {{ report.task.result | get_item:"Confidence" | floatformat:2 }}
@@ -49,7 +49,7 @@
         </div>
 
         <div class="col-md-4 col-sm-12 mb-3">
-            <h6>Anomaly Detection</h6>
+            <h5>Anomaly Detection</h5>
             <p><strong>Anomaly:</strong> {{ report.task.result | get_item:"Anomaly_status" }}</p>
             <p>
                 <strong>Anomaly score:</strong> {{ report.task.result | get_item:'Anomaly_score' | floatformat:2 }}
@@ -66,7 +66,7 @@
         </div>
 
         <div class="col-md-4 col-sm-12 mb-3">
-            <h6>Donor Characteristics</h6>
+            <h5>Donor Characteristics</h5>
             <p><strong>Age:</strong> {{ report.age }}</p>
             {% if report.sex %}
                 {% if report.sex == Predicted_sex %}
@@ -81,21 +81,30 @@
     </div>
 
     <div class="row text-center mb-4">
-        <div id="spinner-row-one" class="d-flex justify-content-center my-3">
-            <div class="spinner-border text-info" style="width: 3rem; height: 3rem;" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-        </div>
-
         <div class="col-md-6 col-sm-12 mb-3" id="plot-a" style="visibility: hidden">
+            <div id="spinner-row-one-1" class="d-flex justify-content-center my-3">
+                <div class="spinner-border text-info" style="width: 3rem; height: 3rem;" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
             {{ pp | safe }}
         </div>
 
         <div class="col-md-3 col-sm-12 mb-3" id="plot-b" style="visibility: hidden">
+            <div id="spinner-row-one-2" class="d-flex justify-content-center my-3">
+                <div class="spinner-border text-info" style="width: 3rem; height: 3rem;" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
             {{ nf | safe }}
         </div>
 
         <div class="col-md-3 col-sm-12 mb-3" id="plot-c" style="visibility: hidden">
+            <div id="spinner-row-one-3" class="d-flex justify-content-center my-3">
+                <div class="spinner-border text-info" style="width: 3rem; height: 3rem;" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
             {{ ap | safe }}
         </div>
     </div>
@@ -106,7 +115,6 @@
                 <span class="visually-hidden">Loading...</span>
             </div>
         </div>
-
         <div class="col-md-12" id="plot-d" style="visibility: hidden">
             {{ cnvs | safe }}
         </div>
@@ -115,7 +123,10 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('spinner-row-one').style.setProperty('display', 'none', 'important');
+    document.getElementById('spinner-row-one-1').style.setProperty('display', 'none', 'important');
+    document.getElementById('spinner-row-one-2').style.setProperty('display', 'none', 'important');
+    document.getElementById('spinner-row-one-3').style.setProperty('display', 'none', 'important');
+
     document.getElementById('spinner-row-two').style.setProperty('display', 'none', 'important');
 
     document.getElementById('plot-a').style.setProperty('visibility', 'visible', 'important');
