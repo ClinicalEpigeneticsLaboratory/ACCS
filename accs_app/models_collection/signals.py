@@ -44,4 +44,5 @@ def delete_model_local_repo(sender, instance, **kwargs):
     model_destination_path = join(
         settings.MEDIA_ROOT, settings.ARTIFACTS_PATH, str(instance.model_id)
     )
-    rmtree(model_destination_path)
+    if exists(model_destination_path):
+        rmtree(model_destination_path)
